@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="api_client.js"></script>
+</head>
+
+<body>
+    <h1>Hello World</h1>
+    <button onclick="GetPatientByID(1).then(response => { alert(JSON.stringify(response)); })">GetPatientByID</button>
+    <button onclick="GetPatients().then(response => { alert(JSON.stringify(response)); })">GetPatients</button>
+    <button onclick="AddPatient('example-firstName', 'example-lastName', 'example-dateOfBirth', 'example-email', 'example-phoneNumber', 'example-address').then(response => { alert(JSON.stringify(response)); })">AddPatient()</button>
+    <button onclick="RemovePatient(1).then(response => { alert(JSON.stringify(response)); })">RemovePatient</button>
+    <button onclick="UpdatePatient(1, 'example-firstName', 'example-lastName', 'example-dateOfBirth', 'example-email', 'example-phoneNumber', 'example-address').then(response => { alert(JSON.stringify(response)); })">UpdatePatient</button>
+</body>
+
+</html>

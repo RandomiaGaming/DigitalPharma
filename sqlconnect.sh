@@ -1,0 +1,1 @@
+mysql -u cs340_christj -h classmysql.engr.oregonstate.edu -p
