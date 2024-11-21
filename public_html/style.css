@@ -1,0 +1,44 @@
+/* Base style for all pages */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+}
+
+header, nav, section {
+    margin: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+nav a {
+    margin-right: 10px;
+    size: 30px;
+}
+
+table {
+    border-collapse: collapse; width: 100%;
+}
+
+table, th, td {
+    border: 5px rgb(0, 0, 0);
+}
+
+th, td {
+    padding: 8px; text-align: left;
+}
+
+tr:hover {
+    background-color: azure;
+}
+
+td.description {
+    white-space: normal;
+}
+
+form {
+    padding: 5px;
+}
+

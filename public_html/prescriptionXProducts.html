@@ -1,0 +1,229 @@
+<!--Format Source from in Class Example "BSG_HTML_UI" CS340-->  
+<!-- PrescriptionXProduct Page for Digital Pharma Website-->
+<!--This page demonstartes the relationship between Prescriptions and Products-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Digital Pharma - Prescriptions X Products</title>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+
+<h1>Patients X Doctors</h1>
+[ <a href="home.html">Home</a> |<a href="clinics.html">Clinics</a> | <a href="doctors.html">Doctors</a> | <a href="patients.html">Patients</a> |
+    <a href="prescriptions.html">Prescriptions</a> | <a href="products.html">Products</a> | <a href="patientsXDoctors.html">PatientsXDoctors</a> |
+    <a href="prescriptionXProducts.html">PrescriptionXProducts</a> ]
+
+<!-- Browse Section -->
+<div id="browsePrescriptionList">
+<p><strong>Prescription Product List</strong></p>
+<table>
+    <tr>
+        <th><a href="#">Add Prescription</a></th>
+        <th></th>
+        <th>Prescription ID</th>
+        <th>Doctor ID</th>
+        <th>Patient ID</th>
+        <th>Quantity</th>
+        <th>Number of Refills</th>
+        <th>Instructions</th>
+    </tr>
+    <!-- Sample Data of Prescriptions -->
+    <tr>
+        <td><a href="#">Edit</a></td>
+        <td><a href="#">Delete</a></td>
+        <td>1</td>
+        <td>1</td>
+        <td>2</td>
+        <td>30</td>
+        <td>2</td>
+        <td>Take 1 tablet by mouth twice daily after meals.</td>
+    </tr>
+    <tr>
+        <td><a href="#">Edit</a></td>
+        <td><a href="#">Delete</a></td>
+        <td>2</td>
+        <td>2</td>
+        <td>4</td>
+        <td>14</td>
+        <td>1</td>
+        <td>Take 1 tablet by mouth every 8 hours as needed.</td>
+    </tr>
+    <tr>
+        <td><a href="#">Edit</a></td>
+        <td><a href="#">Delete</a></td>
+        <td>3</td>
+        <td>3</td>
+        <td>1</td>
+        <td>10</td>
+        <td>0</td>
+        <td>Take 1 capsule by mouth once daily in the morning.</td>
+    </tr>
+    <tr>
+        <td><a href="#">Edit</a></td>
+        <td><a href="#">Delete</a></td>
+        <td>4</td>
+        <td>4</td>
+        <td>5</td>
+        <td>60</td>
+        <td>3</td>
+        <td>Take 1 tablet by mouth every evening before bed.</td>
+    </tr>
+    <tr>
+        <td><a href="#">Edit</a></td>
+        <td><a href="#">Delete</a></td>
+        <td>5</td>
+        <td>5</td>
+        <td>3</td>
+        <td>20</td>
+        <td>1</td>
+        <td>Take 1 tablet by mouth twice daily with food.</td>
+    </tr>
+</table>
+</div>
+<p>___________________________</p>
+<!-- Insert Section -->
+ <div id="insert" style="display: block;">
+    <form id="addNewPrescriptionList">
+        <legend><strong>Create New Prescription List</strong></legend>
+            <fieldset class="fields">
+                <label for="prescriptionID">Prescription ID:</label> <select name="prescriptionID" id="prescriptionID">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <label for="doctorID">Doctor ID:</label><select name="doctorID" id="doctorID">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <label for="patientID">Patient ID:</label><select name="patientID" id="patientID">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <label for="quantity">Quantity:</label><input type="text" id="quantity" name="productQty" required>
+                <label for="numberOfRefills">Number of Refill(s):</label> <input type="text" id="numberOfRefills" name="numberOfRefills" required>
+                <label for="instruction">Instructions:</label> <textarea name="instruction" id="instruction"></textarea>
+
+            </fieldset>
+            <input type="submit" id="addNewPrescriptionList" value="Add New Prescription">
+            <input type="button" value="Cancel">
+    </form>
+    <p>___________________________</p>
+    <form id="addNewProduct">
+        <legend><strong>Add New Products to List</strong></legend>
+            <fieldset class="fields">
+                <label for="prescriptionID">Prescription ID:</label> <select name="prescriptionID" id="prescriptionID">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    </select>
+                <label for="productID">Product ID:</label><select name="productID" id="productID">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    </select>
+            </fieldset>
+            <input type="submit" id="addNewProductList" value="Add New Product">
+            <input type="button" value="Cancel">
+    </form>
+ </div>
+ <p>___________________________</p>
+<!-- Update Section -->
+<div id="update" style="display: block;">
+<form id="updateProductList">
+    <legend><strong>Update Product List</strong></legend>
+    <p><strong>--Prescripton ID: 1's List--</strong></p>
+    <table>
+        <tr>
+            <th><a href="#">Add product</a></th>
+            <th>Product ID</th>
+            <th>Generic Name</th>
+            <th>Brand Name</th>
+            <th>Description</th>
+            <th>Price</th>
+        </tr>
+        <!-- Sample Data of Products -->
+        <tr>
+            <td><a href="#">Delete</a></td>
+            <td>1</td>
+            <td>Ibuprofen</td>
+            <td>Advil</td>
+            <td>Nonsteroidal anti-inflammatory drug used to reduce fever and treate paint or inflammation.</td>
+            <td>$5.99</td>
+        </tr>
+        <tr>
+            <td><a href="#">Delete</a></td>
+            <td>2</td>
+            <td>Acetaminophen</td>
+            <td>Tylenol</td>
+            <td>Pain reliever and af fever reducer commonly used to treat headaches, muscle aches, and minor pain</td>
+            <td>$6.49</td>
+        </tr>
+        <tr>
+            <td><a href="#">Delete</a></td>
+            <td>3</td>
+            <td>Amoxicillin</td>
+            <td>Amoxil</td>
+            <td>Antibiotics are used to treat various bacterial infections.</td>
+            <td>$12.99</td>
+        </tr>
+        <tr>
+            <td><a href="#">Delete</a></td>
+            <td>4</td>
+            <td>Lisinopril</td>
+            <td>Prinivil</td>
+            <td>Medication primarily used to treat high blood pressure and heart failure.</td>
+            <td>$8.99</td>
+        </tr>
+        <tr>
+            <td><a href="#">Delete</a></td>
+            <td>5</td>
+            <td>Metformin</td>
+            <td>Glucophage</td>
+            <td>Medication for managing blood sugar levels in people with type 2 diabetes.</td>
+            <td>$10.49</td>
+        </tr>
+    </table>
+</form>
+</div>
+<p>___________________________</p>
+<!-- Delete Section -->
+<div id="delete">
+    <form id="deletePrescriptionList" style="display: block;">
+        <legend><strong>Delete Prescription List</strong></legend>
+        <fieldset>
+            <p>Confirm that you want to delete the following list:</p>
+            <ul>
+                <li>Prescription ID: 1</li>
+            </ul>
+        </fieldset>
+        <input type="submit" id="deletePrescriptionList" value="Delete List">
+        <input type="button" value="cancel">
+    </form>
+    <form id="deleteProduct" style="display: block;">
+        <legend><strong>Delete Product from Prescription List</strong></legend>
+        <fieldset>
+            <p>Confirm that you want to delete the following product from the list:</p>
+            <ul>
+                <li>Product ID: 1</li>
+                <li>Prodcut's Generic Name: Ibuprofen</li>
+                <li>Patient's Brand Name: Advil</li>
+            </ul>
+        </fieldset>
+        <input type="submit" id="deleteProductFromList" value="Delete Product">
+        <input type="button" value="cancel">
+    </form>
+</div>
+</body>
+</html>

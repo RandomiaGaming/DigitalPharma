@@ -1,0 +1,210 @@
+<!--Format Source from In Class Example "BSG_HTML_UI" CS340--> 
+<!-- Patients Page for Digital Pharma Website-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Digital Pharma - Patients</title>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <script src="script.js"></script>
+</head>
+<body onload="browsePrescriptions()">
+<h1>Digital Pharma</h1>
+<h2>Prescriptions</h2>
+
+<!-- Navigation Links -->
+[ <a href="home.html">Home</a> |<a href="clinics.html">Clinics</a> | <a href="doctors.html">Doctors</a> | <a href="patients.html">Patients</a> |
+    <a href="prescriptions.html">Prescriptions</a> | <a href="products.html">Products</a> | <a href="patientsXDoctors.html">PatientsXDoctors</a> |
+    <a href="prescriptionXProducts.html">PrescriptionXProducts</a> ]
+
+<!-- Browse Section -->
+ <div id="browse" class="form-section">
+    <p><a href="#" onclick="addPrescriptions()">Add New Prescriptions</a></p>
+    <table>
+        <tr>
+            <th>Actions</th>
+            <th>Prescription ID</th>
+            <th>Doctor ID</th>
+            <th>Patient ID</th>
+            <th>Quantity</th>
+            <th>Number of Refill(s)</th>
+            <th>Instruction</th>
+        </tr>
+        <!-- Sample Date For Display-->
+        <tr>
+            <td>
+                <a href="#" onclick="updatePrescriptions(1, 1, 2, 30, 2, 'Take 1 tablet by mouth twice daily after meals.')">Edit</a> |
+                <a href="#" onclick="deletePrescriptions(1, 1, 2)">Delete</a>
+            </td>
+            <td>1</td>
+            <td>1</td>
+            <td>2</td>
+            <td>30</td>
+            <td>2</td>
+            <td>Take 1 tablet by mouth twice daily after meals</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="#" onclick="updatePrescriptions(2, 2, 4, 14, 1, 'Take 1 tablet by mouth every 8 hourse as needed.')">Edit</a> |
+                <a href="#" onclick="deletePrescriptions(2, 2, 4)">Delete</a>
+            </td>
+            <td>2</td>
+            <td>2</td>
+            <td>4</td>
+            <td>14</td>
+            <td>1</td>
+            <td>Take 1 tablet by mouth every 8 hours as needed</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="#" onclick="updatePrescriptions(3, 3, 1, 10, 0, 'Take 1 capsule by mouth once daily in the morning.')">Edit</a> |
+                <a href="#" onclick="deletePrescriptions(3, 3, 1)">Delete</a>
+            </td>
+            <td>3</td>
+            <td>3</td>
+            <td>1</td>
+            <td>10</td>
+            <td>0</td>
+            <td>Take 1 capsule by mouth once daily in the morning</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="#" onclick="updatePrescriptions(4, 4, 5, 60, 3, 'Take 1 tablet by mouth every evening before bed.')">Edit</a> |
+                <a href="#" onclick="deletePrescriptions(4, 4, 5)">Delete</a>
+            </td>
+            <td>4</td>
+            <td>4</td>
+            <td>5</td>
+            <td>60</td>
+            <td>3</td>
+            <td>Take 1 tablet by mouth every evening before bed</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="#" onclick="updatePrescriptions(5, 5, 3, 20, 1, 'Take 1 tablet by mouth twice daily with food.')">Edit</a> |
+                <a href="#" onclick="deletePrescriptions(5, 5, 3)">Delete</a>
+            </td>
+            <td>5</td>
+            <td>5</td>
+            <td>3</td>
+            <td>20</td>
+            <td>1</td>
+            <td>Take 1 tablet by mouth twice daily with food</td>
+        </tr>
+
+    </table>
+ </div>
+<!-- Insert Section -->
+ <div id="insert" class="form-section">
+    <form method="post" id="addPrescriptionForm">
+        <fieldset>
+            <legend><strong>Add Prescription</strong></legend>
+            <table>
+                <th>Enter New Prescription Below:</th>
+                <tr>
+                    <td><label for="docid">Doctor ID:   </label><select name="updateClinicID" id="updateClinicID" required>
+                        <option value="1">Dr. Alice Walker</option>
+                        <option value="2">Dr. Brian Kim</option>
+                        <option value="3">Dr. Carol Smith</option>
+                        <option value="4">Dr. David Jones</option>
+                        <option value="5">Dr. Eva Martinez</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><label for="patid">Patient ID:   </label><select name="updateClinicID" id="updateClinicID" required>
+                        <option value="1">John Doe</option>
+                        <option value="2">Jane Smith</option>
+                        <option value="3">Michael Johnson</option>
+                        <option value="4">Emily Davis</option>
+                        <option value="5">Sarah Brown</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><label for="qty">Quantity:   </label><input type="text" id="qty" name="quantity" required></td>
+                </tr>
+                <tr>
+                    <td><label for="nor">Number of Refill(s):   </label><input type="text" id="nor" name="numberOfRefills" required></td>
+                </tr>
+                <tr>
+                    <td><label for="instruct">Instruction:   </label><input type="text" id="instruct" name="instruction" required></td>
+                </tr>
+            </table>
+            <div>
+                <input type="submit" value="Add Patient">
+                <input type="button" value="Cancel" onclick="browsePrescriptions()">
+            </div>
+        </fieldset>
+    </form>
+
+ </div>
+<!-- Update Section -->
+ <div id="update" class="form-section">
+    <form method="post" id="updatePrescriptionForm">
+        <fieldset>
+            <legend><strong>Update Prescription</strong></legend>
+            <table>
+                <th>Enter New Prescription Information Below:</th>
+                <tr>
+                    <td><label for="updatePrescriptionID">Prescription ID:  </label><span id="updatePrescriptionID"></span></td>
+                </tr>
+                <tr>
+                    <td><label for="updateDoctorID">Doctor:   </label><select name="updateClinicID" id="updateClinicID" required>
+                        <option value="1">Dr. Alice Walker</option>
+                        <option value="2">Dr. Brian Kim</option>
+                        <option value="3">Dr. Carol Smith</option>
+                        <option value="4">Dr. David Jones</option>
+                        <option value="5">Dr. Eva Martinez</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><label for="updatePatientID">Patient ID:   </label><select name="updateClinicID" id="updateClinicID" required>
+                        <option value="1">John Doe</option>
+                        <option value="2">Jane Smith</option>
+                        <option value="3">Michael Johnson</option>
+                        <option value="4">Emily Davis</option>
+                        <option value="5">Sarah Brown</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><label for="updateQuantity">Quantity:   </label><input type="text" id="updateQuantity" name="quantity" required></td>
+                </tr>
+                <tr>
+                    <td><label for="updateNumOfRefills">Number of Refill(s):   </label><input type="text" id="updateNumOfRefills" name="numberOfRefills" required></td>
+                </tr>
+                <tr>
+                    <td><label for="updateInstruction">Instruction:   </label><input type="text" id="updateInstruction" name="instruction" required></td>
+                </tr>
+            </table>
+            <div>
+                <input type="submit" value="Update Patient">
+                <input type="button" value="Cancel" onclick="browsePrescriptions()">
+            </div>
+        </fieldset>
+    </form>
+ </div>
+
+ <!-- Delete Section -->
+  <div id="delete" class="form-section">
+    <form method="post" id="deletePrescriptionForm">
+        <fieldset>
+            <legend><strong>Delete Prescription</strong></legend>
+            <p>Are you sure you want delete this prescription?</p>
+            <table>
+                <th><strong>Confirm Perscription Details:</strong></th>
+                <tr>
+                    <td><strong><label for="deletePrescriptionID">Prescription ID:  </label> <span id="deletePrescriptionID"></span></strong></td>
+                </tr>
+                <tr>
+                    <td><strong><label for="deleteDoctorID">Doctor ID:  </label> <span id="deleteDoctorID"></span></strong></td>
+                </tr>
+                <tr>
+                    <td><strong><label for="deletePatientID">Patient ID:    </label></strong><span id="deletePatientID"></span></td>
+                </tr>
+            </table>
+            <div>
+                <input type="submit" value="Delete Perscription">
+                <input type="button" value="Cancel" onclick="browsePrescriptions()">
+            </div>
+        </fieldset>
+    </form>
+  </div>
