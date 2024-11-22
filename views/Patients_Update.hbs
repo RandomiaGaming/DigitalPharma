@@ -1,0 +1,25 @@
+<br />
+<h2 class="page-title-text">Patients</h2>
+<br />
+<table>
+    <tr>
+        <th>Patient ID</th>
+        <th>Name</th>
+        <th>Date Of Birth</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+    </tr>
+    {{#each results}}
+    <tr>
+        <td>{{patientID}}</td>
+        <td>{{firstName}} {{lastName}}</td>
+        <td>{{dateOfBirth}}</td>
+        <td>{{email}}</td>
+        <td>{{phoneNumber}}</td>
+        <td>{{address}}</td>
+    </tr>
+    {{/each}}
+</table>
+<button>Yes</button>
+<button>No (Cancel)</button>
