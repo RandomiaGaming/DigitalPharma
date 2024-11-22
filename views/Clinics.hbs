@@ -1,26 +1,7 @@
-<!--Format Source from In Class Example "BSG_HTML_UI" CS340--> 
-<!-- Patients Page for Digital Pharma Website-->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Digital Pharma - Clinics</title>
-    <link rel="stylesheet" href="style.css">
-    <meta charset="UTF-8">
-    <script src="script.js"></script>
-</head>
-<body onload="browseClinics()">
-<h1>Digital Pharma</h1>
-<h2>Clinics</h2>
+<h2 class="page-titlebar">Clinics</h2>
 
-<!-- Navigation Links -->
-[ <a href="home.html">Home</a> |<a href="clinics.html">Clinics</a> | <a href="doctors.html">Doctors</a> | <a href="patients.html">Patients</a> |
-    <a href="prescriptions.html">Prescriptions</a> | <a href="products.html">Products</a> | <a href="patientsXDoctors.html">PatientsXDoctors</a> |
-    <a href="prescriptionXProducts.html">PrescriptionXProducts</a> ]
-
-<!-- Browse Section -->
-<!-- Shows all elements in the current Clinics table-->
-<div id="browse" class="form-section">
-    <p><a href="#" onclick="addClinic()">Add New Clinic</a></p>
+<div class="form-section">
+    <p><a>Add New Clinic</a></p>
     <table>
         <tr>
             <th>Actions</th>
@@ -32,53 +13,13 @@
         <!-- Sample Data for Display -->
         <tr>
             <td>
-                <a href="#" onclick="updateClinic(1, '101 Health Ave Springfield IL', 'contact@healthclinic.com', '+1-111-555-1010')">Edit</a> |
-                <a href="#" onclick="deleteClinic(1, '101 Health Ave Springfield IL')">Delete</a>
+                <a href="#" onclick="">Edit</a> |
+                <a href="#" onclick="">Delete</a>
             </td>
             <td>1</td>
             <td>101 Health Ave Springfield IL</td>
             <td>contact@healthclinic.com</td>
-            <td>+1-111-555-1010</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="#" onclick="updateClinic(2, '202 Wellness Blvd Springfield IL', 'info@wellnessclinic.com', '+1-111-555-2020')">Edit</a> |
-                <a href="#" onclick="deleteClinic(2, '202 Wellness Blvd Springfield IL')">Delete</a>
-            </td>
-            <td>2</td>
-            <td>202 Wellness Blvd Springfield IL</td>
-            <td>info@wellnessclinic.com</td>
-            <td>+1-111-555-2020</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="#" onclick="updateClinic(3, '303 Care St Springfield IL', 'NULL', '+1-111-555-3030')">Edit</a> |
-                <a href="#" onclick="deleteClinic(3, '303 Care St Springfield IL')">Delete</a>
-            </td>
-            <td>3</td>
-            <td>303 Care St Springfield IL</td>
-            <td>Unavailable</td>
-            <td>+1-111-555-3030</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="#" onclick="updateClinic(4, '404 Healing Rd Springfield IL', 'hello@healingclinic.com', '+1-111-555-4040')">Edit</a> |
-                <a href="#" onclick="deleteClinic(4, '404 Healing Rd Springfield IL')">Delete</a>
-            </td>
-            <td>4</td>
-            <td>404 Healing Rd Springfield IL</td>
-            <td>hello@healingclinic.com</td>
-            <td>+1-111-555-4040</td>
-        </tr>
-        <tr>
-            <td>
-                <a href="#" onclick="updateClinic(5, '505 Recovery Ln Springfield IL', 'admin@recoveryclinic.com', '+1-111-555-5050')">Edit</a> |
-                <a href="#" onclick="deleteClinic(5, '505 Recovery Ln Springfield IL')">Delete</a>
-            </td>
-            <td>5</td>
-            <td>505 Recovery Ln Springfield IL</td>
-            <td>admin@recoveryclinic.com</td>
-            <td>+1-111-555-5050</td>
+            <td>+1-111-111-1111</td>
         </tr>
     </table>
 </div>
@@ -161,5 +102,3 @@
         </fieldset>
     </form>
 </div>
-</body>
-</html>

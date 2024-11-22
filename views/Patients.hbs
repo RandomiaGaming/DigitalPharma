@@ -1,0 +1,30 @@
+<br />
+<h2 class="page-title-text">Patients</h2>
+<br />
+<p><a onclick="window.location = '/Patients/New'">Add New Patient</a></p>
+<br />
+<table>
+    <tr>
+        <th>Actions</th>
+        <th>Patient ID</th>
+        <th>Name</th>
+        <th>Date Of Birth</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+    </tr>
+    {{#each results}}
+    <tr>
+        <td>
+            <a onclick="window.location = '/Patients/Edit?patientID={{patientID}}'">Edit</a> |
+            <a onclick="window.location = '/Patients/Delete?patientID={{patientID}}'">Delete</a>
+        </td>
+        <td>{{patientID}}</td>
+        <td>{{firstName}} {{lastName}}</td>
+        <td>{{dateOfBirth}}</td>
+        <td>{{email}}</td>
+        <td>{{phoneNumber}}</td>
+        <td>{{address}}</td>
+    </tr>
+    {{/each}}
+</table>

@@ -1,59 +1,63 @@
-console.log("Loading dependencies...");
-const fs = require("fs");
-const path = require("path");
-const { execSync } = require("child_process");
-const mysql = require("mysql");
-const express = require("express");
-const app = express();
-const { engine } = require("express-handlebars");
-const apiServer = require("./api_server/api_server");
-const htmlServer = require("./html_server/html_server");
-console.log("Loaded dependencies.");
-console.log();
+let app;
+let sqlpool;
 
-console.log("Loading environment.json...");
-const environment = JSON.parse(fs.readFileSync("./environment.json", "utf8"));
-const username = environment.username;
-const password = environment.password;
-const database = environment.database;
-const port = environment.port;
-console.log("Loaded environment.json.");
-console.log();
+let username;
+let password;
+let database;
+let port;
 
-console.log("Connecting to sql database...");
-var sqlpool = mysql.createPool({
-    connectionLimit: 10,
-    host: "classmysql.engr.oregonstate.edu",
-    user: username,
-    password: password,
-    database: database
-});
-console.log("Connected to sql database.");
-console.log();
+function LoadEnvironment() {
+    const fs = require("fs");
+    const environment = JSON.parse(fs.readFileSync("./environment.json", "utf8"));
+    username = environment.username;
+    password = environment.password;
+    database = environment.database;
+    port = environment.port;
+}
+function InitSql() {
+    const mysql = require("mysql");
+    sqlpool = mysql.createPool({
+        host: "classmysql.engr.oregonstate.edu",
+        user: username,
+        password: password,
+        database: database
+    });
+    
+    const util = require("util");
+    sqlpool.query = util.promisify(sqlpool.query);
+}
+function InitApp() {
+    const path = require("path");
+    const express = require("express");
+    app = express();
 
-console.log("Setting up html server...");
-app.engine("hbs", engine({
-    extname: "hbs",
-    defaultLayout: "Main",
-    layoutsDir: path.join(__dirname, "html_server", "layouts"),
-    partialsDir: path.join(__dirname, "html_server", "partials")
-}));
-app.set("view engine", "hbs");
-app.set("views", path.join(__dirname, "html_server", "views"));
-const staticContentPath = path.join(__dirname, "html_server", "content");
-app.use(express.static(staticContentPath));
-htmlServer.InitEndpoints(app);
-console.log("Set up html server.");
-console.log();
+    // API Server
+    const apiServer = require("./src/api_server");
+    app.use(express.json());
+    apiServer.SetupAPIEndpoints(app, sqlpool);
 
-console.log("Setting up api server...");
-app.use(express.json());
-apiServer.InitEndpoints(app, sqlpool);
-console.log("Set up api server.");
-console.log();
+    // View Server
+    const viewServer = require("./src/view_server");
+    const { engine } = require("express-handlebars");
+    app.engine("hbs", engine({
+        extname: "hbs",
+        defaultLayout: "Main",
+        layoutsDir: path.join(__dirname, "views", "layouts")
+    }));
+    app.set("view engine", "hbs");
+    app.set("views", path.join(__dirname, "views"));
+    const staticContentPath = path.join(__dirname, "public_html");
+    app.use(express.static(staticContentPath));
+    viewServer.SetupViewEndpoints(app, apiServer);
 
-console.log("Starting server...");
-const hostname = execSync("hostname", { encoding: "utf8" }).trim();
-app.listen(port, () => {
-    console.log(`Started server at http://${hostname}:${port}`);
-});
+    app.listen(port, () => {
+        console.log("Started server!");
+    });
+}
+
+function main() {
+    LoadEnvironment();
+    InitSql();
+    InitApp();
+}
+main();
