@@ -1,25 +1,42 @@
 <br />
-<h2 class="page-title-text">Patients</h2>
+<h2 class="page-title-text">Edit Patients</h2>
 <br />
-<table>
-    <tr>
-        <th>Patient ID</th>
-        <th>Name</th>
-        <th>Date Of Birth</th>
-        <th>Email</th>
-        <th>Phone Number</th>
-        <th>Address</th>
-    </tr>
-    {{#each results}}
-    <tr>
-        <td>{{patientID}}</td>
-        <td>{{firstName}} {{lastName}}</td>
-        <td>{{dateOfBirth}}</td>
-        <td>{{email}}</td>
-        <td>{{phoneNumber}}</td>
-        <td>{{address}}</td>
-    </tr>
-    {{/each}}
-</table>
-<button>Yes</button>
-<button>No (Cancel)</button>
+<form id="patient-new-form">
+    <fieldset>
+        <legend><strong>Update Patient</strong></legend>
+        <table>
+            <th>Update Patient Information Below:</th>
+            <tr>
+                <td><label for="updateFirstName">First Name: </label> <input type="text" name="firstName"></td>
+            </tr>
+            <tr>
+                <td><label for="updateLastName">Last Name: </label> <input type="text" name="lastName"></td>
+            </tr>
+            <tr>
+                <td><label for="updateDOB">Date of Birth: </label> <input type="date" name="dateOfBirth"></td>
+            </tr>
+            <tr>
+                <td><label for="updateEmail">Email: </label> <input type="email" name="email"></td>
+            </tr>
+            <tr>
+                <td><label for="updatePhone">Phone Number: </label> <input type="tel" name="phoneNumber"></td>
+            </tr>
+            <tr>
+                <td><label for="updateAddress">Address: </label> <input type="text" name="address"></td>
+            </tr>
+        </table>
+        <div>
+            <input type="submit" value="Create Patient">
+            <input type="button" value="Cancel" onclick="window.location = '/Patients'">
+        </div>
+    </fieldset>
+</form>
+<script>
+document.getElementById('patient-new-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+    API_AddPatient(data.firstName, data.lastName, data.dateOfBirth, data.email, data.phoneNumber, data.address);
+    window.location = "/Patients";
+});
+</script>

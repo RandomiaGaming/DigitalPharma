@@ -16,7 +16,7 @@ async function API_GetPatients() {
 async function API_GetPatientByID(patientID) {
     return await API_Request("GetPatientByID", { patientID });
 }
-async function AddPatient(firstName, lastName, dateOfBirth, email, phoneNumber, address) {
+async function API_AddPatient(firstName, lastName, dateOfBirth, email, phoneNumber, address) {
     return await API_Request("AddPatient", { firstName, lastName, dateOfBirth, email, phoneNumber, address });
 }
 async function API_RemovePatient(patientID) {

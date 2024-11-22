@@ -20,7 +20,6 @@ function SetupViewEndpoints(app, apiServer) {
         const patientID = req.query.patientID;
         const results = await apiServer.API_GetPatientByID(patientID);
         const result = results[0];
-        console.log(result);
         res.render("Patients_Edit", { title: "Edit Patient", result: result });
     });
     app.get("/Patients/Delete", async (req, res) => {
