@@ -1,25 +1,38 @@
 <br />
-<h2 class="page-title-text">Patients</h2>
+<h2 class="page-title-text">Edit Patients</h2>
 <br />
-<table>
-    <tr>
-        <th>Patient ID</th>
-        <th>Name</th>
-        <th>Date Of Birth</th>
-        <th>Email</th>
-        <th>Phone Number</th>
-        <th>Address</th>
-    </tr>
-    {{#each results}}
-    <tr>
-        <td>{{patientID}}</td>
-        <td>{{firstName}} {{lastName}}</td>
-        <td>{{dateOfBirth}}</td>
-        <td>{{email}}</td>
-        <td>{{phoneNumber}}</td>
-        <td>{{address}}</td>
-    </tr>
-    {{/each}}
-</table>
-<button>Yes</button>
-<button>No (Cancel)</button>
+<div id="update" class="form-section">
+    <form method="post" id="updatePatientForm">
+        <fieldset>
+            <legend><strong>Update Patient</strong></legend>
+            <table>
+                <th>Update Patient Information Below:</th>
+                <tr>
+                    <td><label for="updatePatientID">Patient ID: </label> <input type="text" id="updatePatientID" name="patientID" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="updateFirstName">First Name: </label> <input type="text" id="updateFirstName" name="firstName" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="updateLastName">Last Name: </label> <input type="text" id="updateLastName" name="lastName" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="updateDOB">Date of Birth: </label> <input type="date" id="updateDOB" name="dob" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="updateEmail">Email: </label> <input type="email" id="updateEmail" name="email"></td>
+                </tr>
+                <tr>
+                    <td><label for="updatePhone">Phone Number: </label> <input type="tel" id="updatePhone" name="phone"></td>
+                </tr>
+                <tr>
+                    <td><label for="updateAddress">Address: </label> <input type="text" id="updateAddress" name="address" required></td>
+                </tr>
+            </table>
+            <div>
+                <input type="submit" value="Save Changes">
+                <input type="button" value="Cancel" onclick="browsePatients()">
+            </div>
+        </fieldset>
+    </form>
+</div>
