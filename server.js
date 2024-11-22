@@ -5,7 +5,9 @@ const { execSync } = require("child_process");
 const mysql = require("mysql");
 const express = require("express");
 const app = express();
+const { engine } = require("express-handlebars");
 const apiServer = require("./api_server/api_server");
+const htmlServer = require("./html_server/html_server");
 console.log("Loaded dependencies.");
 console.log();
 
@@ -29,13 +31,19 @@ var sqlpool = mysql.createPool({
 console.log("Connected to sql database.");
 console.log();
 
-console.log("Setting up static html server...");
-const htmlRootPath = path.join(__dirname, "public_html");
-app.use(express.static(htmlRootPath));
-app.get("/", (req, res) => {
-    res.sendFile(path.join(htmlRootPath, "home.html"));
-});
-console.log("Set up static html server.");
+console.log("Setting up html server...");
+app.engine("hbs", engine({
+    extname: "hbs",
+    defaultLayout: "Main",
+    layoutsDir: path.join(__dirname, "html_server", "layouts"),
+    partialsDir: path.join(__dirname, "html_server", "partials")
+}));
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "html_server", "views"));
+const staticContentPath = path.join(__dirname, "html_server", "content");
+app.use(express.static(staticContentPath));
+htmlServer.InitEndpoints(app);
+console.log("Set up html server.");
 console.log();
 
 console.log("Setting up api server...");
