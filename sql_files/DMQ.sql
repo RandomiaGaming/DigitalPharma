@@ -57,6 +57,10 @@ INSERT INTO PatientsXDoctors (patientID, doctorID) VALUES ($patientID$, $doctorI
 SELECT * FROM PatientsXDoctors WHERE patientID=$patientID$ ORDER BY doctorID;
 -- Read all PatientsXDoctors relationships for a given doctorID
 SELECT * FROM PatientsXDoctors WHERE doctorID=$doctorID$ ORDER BY patientID;
+-- Read all PatientsXDoctors relationship
+SELECT PatientsXDoctors.doctorID, PatientsXDoctors.patientID, Patients.firstName AS patientFirstName, Patients.lastName AS patientLastName, Doctors.firstName AS doctorFirstName, Doctors.lastName AS doctorLastName
+FROM PatientsXDoctors INNER JOIN Patients ON PatientsXDoctors.patientID=$Patients.patientID$ INNER JOIN Doctors ON PatientsXDoctors.doctorID=$Doctors.doctorID$
+ORDER BY PatientsXDoctors.patientID, PatientsXDoctors.doctorID;
 -- Delete a PatientsXDoctors relationship
 DELETE FROM PatientsXDoctors WHERE patientID=$patientID$ AND doctorID=$doctorID$;
 
@@ -67,5 +71,8 @@ INSERT INTO PrescriptionsXProducts (prescriptionID, productID) VALUES ($prescrip
 SELECT * FROM PrescriptionsXProducts WHERE prescriptionID=$prescriptionID$ ORDER BY productID;
 -- Read all PrescriptionsXProducts relationships for a given productID
 SELECT * FROM PrescriptionsXProducts WHERE productID=$productID$ ORDER BY prescriptionID;
+-- Read all PrescriptionsXProducts relationship
+SELECT PrescriptionsXProducts.prescriptionID, PrescriptionsXProducts.productID, Prescriptions.doctorID, Prescription.patientID, Products.genericName, Products.brand, Products.description FROM PrescriptionsXProducts
+INNER JOIN Prescriptions on PrescriptionsXProducts.prescriptionID=$Prescriptions.prescriptionID$ INNER JOIN PrescriptionsXProducts.productID=$Products.productID$ ORDER BY PrescriptionsXProducts.prescriptionID, PrescriptionsXProducts.productID;
 -- Delete a PrescriptionsXProducts relationship
 DELETE FROM PrescriptionsXProducts WHERE prescriptionID=$prescriptionID$ AND productID=$productID$;
