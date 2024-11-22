@@ -18,17 +18,17 @@ async function API_GetPatientByID(patientID) {
     return results;
 }
 async function API_AddPatient(firstName, lastName, dateOfBirth, email, phoneNumber, address) {
-    const query = `INSERT INTO Patients (firstName, lastName, dateOfBirth, email, phoneNumber, address) VALUES (\"${request.firstName}\", \"${request.lastName}\", \"${request.dateOfBirth}\", \"${request.email}\", \"${request.phoneNumber}\", \"${request.address}\");`;
+    const query = `INSERT INTO Patients (firstName, lastName, dateOfBirth, email, phoneNumber, address) VALUES (\"${firstName}\", \"${lastName}\", \"${dateOfBirth}\", \"${email}\", \"${phoneNumber}\", \"${address}\");`;
     const results = await SQL_Query(query);
     return results;
 }
 async function API_RemovePatient(patientID) {
-    const query = `DELETE FROM Patients WHERE patientID=\"${request.patientID}\";`;
+    const query = `DELETE FROM Patients WHERE patientID=\"${patientID}\";`;
     const results = await SQL_Query(query);
     return results;
 }
 async function API_UpdatePatient(patientID, firstName, lastName, dateOfBirth, email, phoneNumber, address) {
-    const query = `UPDATE Patients SET firstName=\"${request.firstName}\", lastName=\"${request.lastName}\", dateOfBirth=\"${request.dateOfBirth}\", email=\"${request.email}\", phoneNumber=\"${request.phoneNumber}\", address=\"${request.address}\" WHERE patientID=\"${request.patientID}\";`;
+    const query = `UPDATE Patients SET firstName=\"${firstName}\", lastName=\"${lastName}\", dateOfBirth=\"${dateOfBirth}\", email=\"${email}\", phoneNumber=\"${phoneNumber}\", address=\"${address}\" WHERE patientID=\"${patientID}\";`;
     const results = await SQL_Query(query);
     return results;
 }
@@ -46,7 +46,7 @@ function SetupAPIEndpoints(appIn, sqlpoolIn) {
         res.json(results);
     });
     app.post("/API/AddPatient", async (req, res) => {
-        const results = await API_AddPatient(req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.phoneNumber, req.body.address);
+        const results = await API_AddPatient(req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
         res.json(results);
     });
     app.post("/API/RemovePatient", async (req, res) => {
@@ -54,7 +54,7 @@ function SetupAPIEndpoints(appIn, sqlpoolIn) {
         res.json(results);
     });
     app.post("/API/UpdatePatient", async (req, res) => {
-        const results = await API_UpdatePatient(req.body.patientID, req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.phoneNumber, req.body.address);
+        const results = await API_UpdatePatient(req.body.patientID, req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
         res.json(results);
     });
 }

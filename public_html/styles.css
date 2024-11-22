@@ -99,3 +99,7 @@ table, tr, td, th {
 tr, td, th {
     padding: 3px;
 }
+input {
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid white;
+}

@@ -19,12 +19,15 @@ function SetupViewEndpoints(app, apiServer) {
     app.get("/Patients/Edit", async (req, res) => {
         const patientID = req.query.patientID;
         const results = await apiServer.API_GetPatientByID(patientID);
-        res.render("Patients_Delete", { title: "Edit Patient", results: results });
+        const result = results[0];
+        console.log(result);
+        res.render("Patients_Edit", { title: "Edit Patient", result: result });
     });
     app.get("/Patients/Delete", async (req, res) => {
         const patientID = req.query.patientID;
         const results = await apiServer.API_GetPatientByID(patientID);
-        res.render("Patients_Delete", { title: "Delete Patient", results: results });
+        const result = results[0];
+        res.render("Patients_Delete", { title: "Delete Patient", result: result });
     });
 
     app.get("/Prescriptions", async (req, res) => {
