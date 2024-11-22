@@ -1,25 +1,24 @@
 <br />
 <h2 class="page-title-text">Patients</h2>
 <br />
-<table>
-    <tr>
-        <th>Patient ID</th>
-        <th>Name</th>
-        <th>Date Of Birth</th>
-        <th>Email</th>
-        <th>Phone Number</th>
-        <th>Address</th>
-    </tr>
-    {{#each results}}
-    <tr>
-        <td>{{patientID}}</td>
-        <td>{{firstName}} {{lastName}}</td>
-        <td>{{dateOfBirth}}</td>
-        <td>{{email}}</td>
-        <td>{{phoneNumber}}</td>
-        <td>{{address}}</td>
-    </tr>
-    {{/each}}
-</table>
-<button>Yes</button>
-<button>No (Cancel)</button>
+<h3>CONFIRM PATIENT DELETE</h3>
+
+<form id="delete-patient-form">
+        <fieldset>
+        <p>Are you sure you want to delete this patient?</p>
+        <table>
+            <th>Confirm Patient Information:</th>
+            <tr>
+                <td>Patient ID: {{result.patientID}}</td>
+            </tr>
+            <tr>
+                <td>Patient Name: {{result.firstName}} {{result.lastName}}</td>
+            </tr>
+
+        </table>
+        <div>
+            <input type="submit" value="Delete Patient" onclick="API_RemovePatient({{result.patientID}})">
+            <input type="button" value="Cancel" onclick="window.location = '/Patients'">
+        </div>
+    </fieldset>
+</form>
