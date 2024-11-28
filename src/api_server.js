@@ -59,10 +59,68 @@ function SetupAPIEndpoints(appIn, sqlpoolIn) {
     });
 }
 
+// CRUD operations on Clinics table
+async function API_GetClinics() {
+    const query = `SELECT * FROM Clinics;`;
+    const results = await SQL_Query(query);
+    return results;
+}
+async function API_GetClinicByID(clinicID) {
+    const query = `SELECT * FROM Clinics WHERE clinicID=\"${clinicID}\";`;
+    const results = await SQL_Query(query);
+    return results;
+}
+async function API_AddClinic(address, email, phoneNumber) {
+    const query = `INSERT INTO Clinics (address, email, phoneNumber) VALUES (\"${address}\", \"${email}\", \"${phoneNumber}\");`;
+    const results = await SQL_Query(query);
+    return results;
+}
+async function API_RemoveClinic(clinicID) {
+    const query = `DELETE FROM Clinics WHERE clinicID=\"${clinicID}\";`;
+    const results = await SQL_Query(query);
+    return results;
+}
+async function API_UpdateClinic(clinicID, address, email, phoneNumber) {
+    const query = `UPDATE Patients SET address=\"${address}\", email=\"${email}\", phoneNumber=\"${phoneNumber}\" WHERE clinicID=\"${clinicID}\";`;
+    const results = await SQL_Query(query);
+    return results;
+}
+
+function SetupAPIEndpoints(appIn, sqlpoolIn) {
+    app = appIn;
+    sqlpool = sqlpoolIn;
+
+    app.post("/API/GetClinics", async (req, res) => {
+        const results = await API_GetClinicByID();
+        res.json(results);
+    });
+    app.post("/API/GetClinicByID", async (req, res) => {
+        const results = await API_GetClinics(req.body.patientID);
+        res.json(results);
+    });
+    app.post("/API/AddClinic", async (req, res) => {
+        const results = await API_AddClinic(req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
+        res.json(results);
+    });
+    app.post("/API/RemoveClinic", async (req, res) => {
+        const results = await API_RemoveClinic(req.body.patientID);
+        res.json(results);
+    });
+    app.post("/API/UpdateClinic", async (req, res) => {
+        const results = await API_UpdateClinic(req.body.patientID, req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
+        res.json(results);
+    });
+}
+
 module.exports.SQL_Query = SQL_Query;
 module.exports.API_GetPatients = API_GetPatients;
 module.exports.API_GetPatientByID = API_GetPatientByID;
 module.exports.API_AddPatient = API_AddPatient;
 module.exports.API_RemovePatient = API_RemovePatient;
 module.exports.API_UpdatePatient = API_UpdatePatient;
+module.exports.API_GetClinics = API_GetClinics;
+module.exports.API_GetClinicByID = API_GetClinicByID;
+module.exports.API_AddClinic = API_AddClinic;
+module.exports.API_RemoveClinic = API_RemoveClinic;
+module.exports.API_UpdateClinic = API_UpdateClinic;
 module.exports.SetupAPIEndpoints = SetupAPIEndpoints;
