@@ -95,19 +95,19 @@ function SetupAPIEndpoints(appIn, sqlpoolIn) {
         res.json(results);
     });
     app.post("/API/GetClinicByID", async (req, res) => {
-        const results = await API_GetClinics(req.body.patientID);
+        const results = await API_GetClinics(req.body.clinicID);
         res.json(results);
     });
     app.post("/API/AddClinic", async (req, res) => {
-        const results = await API_AddClinic(req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
+        const results = await API_AddClinic(req.body.address, req.body.last, req.body.email, req.body.phoneNumber);
         res.json(results);
     });
     app.post("/API/RemoveClinic", async (req, res) => {
-        const results = await API_RemoveClinic(req.body.patientID);
+        const results = await API_RemoveClinic(req.body.clinicID);
         res.json(results);
     });
     app.post("/API/UpdateClinic", async (req, res) => {
-        const results = await API_UpdateClinic(req.body.patientID, req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
+        const results = await API_UpdateClinic(req.body.address, req.body.email, req.body.phoneNumber);
         res.json(results);
     });
 }

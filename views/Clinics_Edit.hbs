@@ -1,45 +1,37 @@
 <br />
-<h2 class="page-title-text">Edit Patients</h2>
+<h2 class="page-title-text">Edit Clinics</h2>
 <br />
-<form id="patient-edit-form">
+<form id="clinic-edit-form">
     <fieldset>
-        <legend><strong>Update Patient</strong></legend>
+        <legend><strong>Update Clinics</strong></legend>
         <table>
-            <th>Update Patient Information Below:</th>
+            <th>Update Clinic Information Below:</th>
             <tr>
-                <td><label for="updatePatientID">Patient ID: </label> <input type="text" name="patientID" value="{{result.patientID}}" readonly></td>
+                <td><label for="updateClinicID">Clinic ID: </label> <input type="text" name="clinicID" value="{{result.clinicID}}" readonly></td>
             </tr>
             <tr>
-                <td><label for="updateFirstName">First Name: </label> <input type="text" value="{{result.firstName}}" name="firstName"></td>
+                <td><label for="updateClinicAddress">Clinic Address: </label> <input type="text" value="{{result.address}}" name="address"></td>
             </tr>
             <tr>
-                <td><label for="updateLastName">Last Name: </label> <input type="text" value="{{result.lastName}}" name="lastName"></td>
+                <td><label for="updateClinicEmail">Clinic Email: </label> <input type="email" value="{{result.email}}" name="email"></td>
             </tr>
             <tr>
-                <td><label for="updateDOB">Date of Birth: </label> <input type="date" value="{{result.dateOfBirth}}" name="dateOfBirth"></td>
+                <td><label for="updateClinicPhoneNumber">Clinic Phone Number: </label> <input type="text" value="{{result.phoneNumber}}" name="phoneNumber"></td>
             </tr>
-            <tr>
-                <td><label for="updateEmail">Email: </label> <input type="email" value="{{result.email}}" name="email"></td>
-            </tr>
-            <tr>
-                <td><label for="updatePhone">Phone Number: </label> <input type="tel" value="{{result.phoneNumber}}" name="phoneNumber"></td>
-            </tr>
-            <tr>
-                <td><label for="updateAddress">Address: </label> <input type="text" value="{{result.address}}" name="address"></td>
-            </tr>
+
         </table>
         <div>
             <input type="submit" value="Save Changes">
-            <input type="button" value="Cancel" onclick="window.location = '/Patients'">
+            <input type="button" value="Cancel" onclick="window.location = '/Clinics'">
         </div>
     </fieldset>
 </form>
 <script>
-document.getElementById('patient-edit-form').addEventListener('submit', function (event) {
+document.getElementById('clinic-edit-form').addEventListener('submit', function (event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
-    API_UpdatePatient(data.patientID, data.firstName, data.lastName, data.dateOfBirth, data.email, data.phoneNumber, data.address);
-    window.location = "/Patients";
+    API_UpdateClinic(data.clinicD, data.address, data.email, data.phoneNumber);
+    window.location = "/Clinics";
 });
 </script>
