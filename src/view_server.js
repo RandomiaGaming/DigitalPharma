@@ -106,5 +106,39 @@ function SetupViewEndpoints(appIn, apiServerIn) {
         const result = await apiServer.API_GetPrescriptionByID(req.query.id.toString());
         res.render("Prescriptions/Prescriptions_Delete", { title: "Delete Prescription", result: result, tableNameSingular: "Prescription", tableName: "Prescriptions" });
     });
+
+    // Views for PatientsXDoctors table
+    SetupViewEndpoint("/PatientsXDoctors", async (req, res) => {
+        const results = await apiServer.API_GetPatientsXDoctors();
+        res.render("PatientsXDoctors/PatientsXDoctors", { title: "PatientsXDoctors", results: results, tableNameSingular: "PatientsXDoctors", tableName: "PatientsXDoctors" });
+    });
+    SetupViewEndpoint("/PatientsXDoctors/New", async (req, res) => {
+        res.render("PatientsXDoctors/PatientsXDoctors_New", { title: "New PatientsXDoctors", tableNameSingular: "PatientsXDoctors", tableName: "PatientsXDoctors" });
+    });
+    SetupViewEndpoint("/PatientsXDoctors/Edit", async (req, res) => {
+        const result = await apiServer.API_GetPatientsXDoctorsByID(req.query.id.toString());
+        res.render("PatientsXDoctors/PatientsXDoctors_Edit", { title: "Edit PatientsXDoctors", result: result, tableNameSingular: "PatientsXDoctors", tableName: "PatientsXDoctors" });
+    });
+    SetupViewEndpoint("/PatientsXDoctors/Delete", async (req, res) => {
+        const result = await apiServer.API_GetPatientsXDoctorsByID(req.query.id.toString());
+        res.render("PatientsXDoctors/PatientsXDoctors_Delete", { title: "Delete PatientsXDoctors", result: result, tableNameSingular: "PatientsXDoctors", tableName: "PatientsXDoctors" });
+    });
+
+    // Views for PrescriptionsXProducts table
+    SetupViewEndpoint("/PrescriptionsXProducts", async (req, res) => {
+        const results = await apiServer.API_GetPrescriptionsXProducts();
+        res.render("PrescriptionsXProducts/PrescriptionsXProducts", { title: "PrescriptionsXProducts", results: results, tableNameSingular: "PrescriptionsXProducts", tableName: "PrescriptionsXProducts" });
+    });
+    SetupViewEndpoint("/PrescriptionsXProducts/New", async (req, res) => {
+        res.render("PrescriptionsXProducts/PrescriptionsXProducts_New", { title: "New PrescriptionsXProducts", tableNameSingular: "PrescriptionsXProducts", tableName: "PrescriptionsXProducts" });
+    });
+    SetupViewEndpoint("/PrescriptionsXProducts/Edit", async (req, res) => {
+        const result = await apiServer.API_GetPrescriptionsXProductsByID(req.query.id.toString());
+        res.render("PrescriptionsXProducts/PrescriptionsXProducts_Edit", { title: "Edit PrescriptionsXProducts", result: result, tableNameSingular: "PrescriptionsXProducts", tableName: "PrescriptionsXProducts" });
+    });
+    SetupViewEndpoint("/PrescriptionsXProducts/Delete", async (req, res) => {
+        const result = await apiServer.API_GetPrescriptionsXProductsByID(req.query.id.toString());
+        res.render("PrescriptionsXProducts/PrescriptionsXProducts_Delete", { title: "Delete PrescriptionsXProducts", result: result, tableNameSingular: "PrescriptionsXProducts", tableName: "PrescriptionsXProducts" });
+    });
 }
 module.exports.SetupViewEndpoints = SetupViewEndpoints;

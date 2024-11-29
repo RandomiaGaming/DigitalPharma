@@ -108,3 +108,41 @@ async function API_RemovePrescription(prescriptionID) {
 async function API_UpdatePrescription(prescriptionID, doctorID, patientID, quantity, numberOfRefills, instructions) {
     await API_Request("/API/UpdatePrescription", { prescriptionID, doctorID, patientID, quantity, numberOfRefills, instructions });
 }
+
+// CRUD operations for PatientsXDoctors table
+async function API_GetPatientsXDoctors() {
+    const results = await API_Request("/API/GetPatientsXDoctors", {});
+    return results;
+}
+async function API_GetPatientsXDoctorsByID(patientsXDoctorsID) {
+    const result = await API_Request("/API/GetPatientsXDoctorsByID", { patientsXDoctorsID });
+    return result;
+}
+async function API_AddPatientsXDoctors(patientID, doctorID) {
+    await API_Request("/API/AddPatientsXDoctors", { patientID, doctorID });
+}
+async function API_RemovePatientsXDoctors(patientsXDoctorsID) {
+    await API_Request("/API/RemovePatientsXDoctors", { patientsXDoctorsID });
+}
+async function API_UpdatePatientsXDoctors(patientsXDoctorsID, patientID, doctorID) {
+    await API_Request("/API/UpdatePatientsXDoctors", { patientsXDoctorsID, patientID, doctorID });
+}
+
+// CRUD operations for PrescriptionsXProducts table
+async function API_GetPrescriptionsXProducts() {
+    const results = await API_Request("/API/GetPrescriptionsXProducts", {});
+    return results;
+}
+async function API_GetPrescriptionsXProductsByID(prescriptionsXProductsID) {
+    const result = await API_Request("/API/GetPrescriptionsXProductsByID", { prescriptionsXProductsID });
+    return result;
+}
+async function API_AddPrescriptionsXProducts(prescriptionID, productID) {
+    await API_Request("/API/AddPrescriptionsXProducts", { prescriptionID, productID });
+}
+async function API_RemovePrescriptionsXProducts(prescriptionsXProductsID) {
+    await API_Request("/API/RemovePrescriptionsXProducts", { prescriptionsXProductsID });
+}
+async function API_UpdatePrescriptionsXProducts(prescriptionsXProductsID, prescriptionID, productID) {
+    await API_Request("/API/UpdatePrescriptionsXProducts", { prescriptionsXProductsID, prescriptionID, productID });
+}

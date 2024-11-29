@@ -206,6 +206,50 @@ function SetupAPIEndpoints(appIn, sqlpoolIn) {
         await API_UpdatePrescription(req.body.prescriptionID, req.body.doctorID, req.body.patientID, req.body.quantity, req.body.numberOfRefills, req.body.instructions);
         res.json({});
     });
+
+    // CRUD operations for PatientsXDoctors table
+    SetupAPIEndpoint("/API/GetPatientsXDoctors", async (req, res) => {
+        const results = await API_GetPatientsXDoctors();
+        res.json(results);
+    });
+    SetupAPIEndpoint("/API_GetPatientsXDoctorsByID", async (req, res) => {
+        const result = await API_GetPatientsXDoctorsByID(req.body.patientsXDoctorsID);
+        res.json(result);
+    });
+    SetupAPIEndpoint("/API/AddPatientsXDoctors", async (req, res) => {
+        await API_AddPatientsXDoctors(req.body.patientID, req.body.doctorID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/RemovePatientsXDoctors", async (req, res) => {
+        await API_RemovePatientsXDoctors(req.body.patientsXDoctorsID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/UpdatePatientsXDoctors", async (req, res) => {
+        await API_UpdatePatientsXDoctors(req.body.patientsXDoctorsID, req.body.patientID, req.body.doctorID);
+        res.json({});
+    });
+
+    // CRUD operations for PrescriptionsXProducts table
+    SetupAPIEndpoint("/API/GetPrescriptionsXProducts", async (req, res) => {
+        const results = await API_GetPrescriptionsXProducts();
+        res.json(results);
+    });
+    SetupAPIEndpoint("/API/GetPrescriptionsXProductsByID", async (req, res) => {
+        const result = await API_GetPrescriptionsXProductsByID(req.body.prescriptionsXProductsID);
+        res.json(result);
+    });
+    SetupAPIEndpoint("/API/AddPrescriptionsXProducts", async (req, res) => {
+        await API_AddPrescriptionsXProducts(req.body.prescriptionID, req.body.productID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/RemovePrescriptionsXProducts", async (req, res) => {
+        await API_RemovePrescriptionsXProducts(req.body.prescriptionsXProductsID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/UpdatePrescriptionsXProducts", async (req, res) => {
+        await API_UpdatePrescriptionsXProducts(req.body.prescriptionsXProductsID, req.body.prescriptionID, req.body.productID);
+        res.json({});
+    });
 }
 module.exports.SetupAPIEndpoints = SetupAPIEndpoints;
 
@@ -306,7 +350,7 @@ module.exports.API_GetProducts = API_GetProducts;
 async function API_GetProductByID(productID) {
     const query = `SELECT genericName, brandName, description, price FROM Products WHERE productID=${EscapeSQL(productID)};`;
     const results = await SQL_Query(query);
-    return results;
+    return results[0];
 }
 module.exports.API_GetProductByID = API_GetProductByID;
 async function API_AddProduct(genericName, brandName, description, price) {
@@ -335,7 +379,7 @@ module.exports.API_GetPrescriptions = API_GetPrescriptions;
 async function API_GetPrescriptionByID(prescriptionID) {
     const query = `SELECT doctorID, patientID, quantity, numberOfRefills, instructions FROM Prescriptions WHERE prescriptionID=${EscapeSQL(prescriptionID)};`;
     const results = await SQL_Query(query);
-    return results;
+    return results[0];
 }
 module.exports.API_GetPrescriptionByID = API_GetPrescriptionByID;
 async function API_AddPrescription(doctorID, patientID, quantity, numberOfRefills, instructions) {
@@ -353,3 +397,61 @@ async function API_UpdatePrescription(prescriptionID, doctorID, patientID, quant
     await SQL_Query(query);
 }
 module.exports.API_UpdatePrescription = API_UpdatePrescription;
+
+// CRUD operations for PatientsXDoctors table
+async function API_GetPatientsXDoctors() {
+    const query = `SELECT patientsXDoctorsID, patientID, doctorID FROM PatientsXDoctors;`;
+    const results = await SQL_Query(query);
+    return results;
+}
+module.exports.API_GetPatientsXDoctors = API_GetPatientsXDoctors;
+async function API_GetPatientsXDoctorsByID(patientsXDoctorsID) {
+    const query = `SELECT patientsXDoctorsID, patientID, doctorID FROM PatientsXDoctors WHERE patientsXDoctorsID=${EscapeSQL(patientsXDoctorsID)};`;
+    const results = await SQL_Query(query);
+    return results[0];
+}
+module.exports.API_GetPatientsXDoctorsByID = API_GetPatientsXDoctorsByID;
+async function API_AddPatientsXDoctors(patientID, doctorID) {
+    const query = `INSERT INTO PatientsXDoctors (patientID, doctorID) VALUES (${EscapeSQL(patientID)}, ${EscapeSQL(doctorID)});`;
+    await SQL_Query(query);
+}
+module.exports.API_AddPatientsXDoctors = API_AddPatientsXDoctors;
+async function API_RemovePatientsXDoctors(patientsXDoctorsID) {
+    const query = `DELETE FROM PatientsXDoctors WHERE patientsXDoctorsID=${EscapeSQL(patientsXDoctorsID)};`;
+    await SQL_Query(query);
+}
+module.exports.API_RemovePatientsXDoctors = API_RemovePatientsXDoctors;
+async function API_UpdatePatientsXDoctors(patientsXDoctorsID, patientID, doctorID) {
+    const query = `UPDATE PatientsXDoctors SET patientID=${EscapeSQL(patientID)}, doctorID=${EscapeSQL(doctorID)} WHERE patientsXDoctorsID=${EscapeSQL(patientsXDoctorsID)};`;
+    await SQL_Query(query);
+}
+module.exports.API_UpdatePatientsXDoctors = API_UpdatePatientsXDoctors;
+
+// CRUD operations for PrescriptionsXProducts table
+async function API_GetPrescriptionsXProducts() {
+    const query = `SELECT prescriptionsXProductsID, prescriptionID, productID FROM PrescriptionsXProducts;`;
+    const results = await SQL_Query(query);
+    return results;
+}
+module.exports.API_GetPrescriptionsXProducts = API_GetPrescriptionsXProducts;
+async function API_GetPrescriptionsXProductsByID(prescriptionsXProductsID) {
+    const query = `SELECT prescriptionsXProductsID, prescriptionID, productID FROM PrescriptionsXProducts WHERE prescriptionsXProductsID=${EscapeSQL(prescriptionsXProductsID)};`;
+    const results = await SQL_Query(query);
+    return results[0];
+}
+module.exports.API_GetPrescriptionsXProductsByID = API_GetPrescriptionsXProductsByID;
+async function API_AddPrescriptionsXProducts(prescriptionID, productID) {
+    const query = `INSERT INTO PrescriptionsXProducts (prescriptionID, productID) VALUES (${EscapeSQL(prescriptionID)}, ${EscapeSQL(productID)});`;
+    await SQL_Query(query);
+}
+module.exports.API_AddPrescriptionsXProducts = API_AddPrescriptionsXProducts;
+async function API_RemovePrescriptionsXProducts(prescriptionsXProductsID) {
+    const query = `DELETE FROM PrescriptionsXProducts WHERE prescriptionsXProductsID=${EscapeSQL(prescriptionsXProductsID)};`;
+    await SQL_Query(query);
+}
+module.exports.API_RemovePrescriptionsXProducts = API_RemovePrescriptionsXProducts;
+async function API_UpdatePrescriptionsXProducts(prescriptionsXProductsID, prescriptionID, productID) {
+    const query = `UPDATE PrescriptionsXProducts SET prescriptionID=${EscapeSQL(prescriptionID)}, productID=${EscapeSQL(productID)} WHERE prescriptionsXProductsID=${EscapeSQL(prescriptionsXProductsID)};`;
+    await SQL_Query(query);
+}
+module.exports.API_UpdatePrescriptionsXProducts = API_UpdatePrescriptionsXProducts;
