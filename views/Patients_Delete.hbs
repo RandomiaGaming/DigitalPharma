@@ -28,6 +28,6 @@ document.getElementById('patient-delete-form').addEventListener('submit', functi
     const formData = new FromData(event.target);
     const data = Object.fromEntries(formData.entries());
     API_RemovePatient(data.patientID);
-    window.location = "/Patients";
+    //window.location = "/Patients";
 });
 </script>

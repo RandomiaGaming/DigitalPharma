@@ -1,45 +1,41 @@
-function SetupViewEndpoints(app, apiServer) {
-    app.get("/", async (req, res) => {
-        res.render("Home", { title: "Home" });
+let app;
+let apiServer;
+
+function SetupViewEndpoint(endpointName, handler) {
+    app.get(endpointName, async (req, res) => {
+        try {
+            await handler(req, res);
+        } catch (err) {
+            const errMsg = `ERROR: ${err.message || err}`;
+            console.log(errMsg);
+            res.status(500).json({ error: errMsg });
+        }
     });
-    app.get("/Clinics", async (req, res) => {
-        res.render("Clinics", { title: "Clinics" });
-    });
-    app.get("/Doctors", async (req, res) => {
-        res.render("Doctors", { title: "Doctors" });
+}
+function SetupViewEndpoints(appIn, apiServerIn) {
+    app = appIn;
+    apiServer = apiServerIn;
+
+    SetupViewEndpoint("/", async (req, res) => { 
+        res.render("Home", { title: "Home" }); 
     });
 
-    app.get("/Patients", async (req, res) => {
+    SetupViewEndpoint("/Patients", async (req, res) => {
         const results = await apiServer.API_GetPatients();
-        res.render("Patients", { title: "Patients", results: results });
+        res.render("Patients", { title: "Patients", results: results }); 
     });
-    app.get("/Patients/New", async (req, res) => {
-        res.render("Patients_New", { title: "New Patient" });
+    SetupViewEndpoint("/Patients/New", async (req, res) => {
+        res.render("Patients_New", { title: "New Patient" }); 
     });
-    app.get("/Patients/Edit", async (req, res) => {
-        const patientID = req.query.patientID;
-        const results = await apiServer.API_GetPatientByID(patientID);
+    SetupViewEndpoint("/Patients/Edit", async (req, res) => {
+        const results = await apiServer.API_GetPatientByID(req.query.patientID.toString());
         const result = results[0];
         res.render("Patients_Edit", { title: "Edit Patient", result: result });
     });
-    app.get("/Patients/Delete", async (req, res) => {
-        const patientID = req.query.patientID;
-        const results = await apiServer.API_GetPatientByID(patientID);
+    SetupViewEndpoint("/Patients/Delete", async (req, res) => {
+        const results = await apiServer.API_GetPatientByID(req.query.patientID.toString());
         const result = results[0];
         res.render("Patients_Delete", { title: "Delete Patient", result: result });
-    });
-
-    app.get("/Prescriptions", async (req, res) => {
-        res.render("Prescriptions", { title: "Prescriptions" });
-    });
-    app.get("/Products", async (req, res) => {
-        res.render("Products", { title: "Products" });
-    });
-    app.get("/PatientsXDoctors", async (req, res) => {
-        res.render("PatientsXDoctors", { title: "PatientsXDoctors" });
-    });
-    app.get("/PrescriptionsXProducts", async (req, res) => {
-        res.render("PrescriptionsXProducts", { title: "PrescriptionsXProducts" });
     });
 }
 

@@ -40,6 +40,6 @@ document.getElementById('patient-edit-form').addEventListener('submit', function
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     API_UpdatePatient(data.patientID, data.firstName, data.lastName, data.dateOfBirth, data.email, data.phoneNumber, data.address);
-    window.location = "/Patients";
+    //window.location = "/Patients";
 });
 </script>
