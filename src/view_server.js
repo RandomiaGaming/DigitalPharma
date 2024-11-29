@@ -6,7 +6,7 @@ function SetupViewEndpoint(endpointName, handler) {
         } catch (err) {
             const errMsg = `ERROR: ${err.message || err}`;
             console.error(errMsg);
-            res.status(500).json({ error: errMsg });
+            res.status(500).send(errMsg);
         }
     });
 }
@@ -31,12 +31,80 @@ function SetupViewEndpoints(appIn, apiServerIn) {
         res.render("Patients/Patients_New", { title: "New Patient", tableNameSingular: "Patient", tableName: "Patients" });
     });
     SetupViewEndpoint("/Patients/Edit", async (req, res) => {
-        const result = await apiServer.API_GetPatientByID(req.query.patientID.toString());
+        const result = await apiServer.API_GetPatientByID(req.query.id.toString());
         res.render("Patients/Patients_Edit", { title: "Edit Patient", result: result, tableNameSingular: "Patient", tableName: "Patients" });
     });
     SetupViewEndpoint("/Patients/Delete", async (req, res) => {
-        const result = await apiServer.API_GetPatientByID(req.query.patientID.toString());
+        const result = await apiServer.API_GetPatientByID(req.query.id.toString());
         res.render("Patients/Patients_Delete", { title: "Delete Patient", result: result, tableNameSingular: "Patient", tableName: "Patients" });
+    });
+
+    // Views for Clinics table
+    SetupViewEndpoint("/Clinics", async (req, res) => {
+        const results = await apiServer.API_GetClinics();
+        res.render("Clinics/Clinics", { title: "Clinics", results: results, tableNameSingular: "Clinic", tableName: "Clinics" });
+    });
+    SetupViewEndpoint("/Clinics/New", async (req, res) => {
+        res.render("Clinics/Clinics_New", { title: "New Clinic", tableNameSingular: "Clinic", tableName: "Clinics" });
+    });
+    SetupViewEndpoint("/Clinics/Edit", async (req, res) => {
+        const result = await apiServer.API_GetClinicByID(req.query.id.toString());
+        res.render("Clinics/Clinics_Edit", { title: "Edit Clinic", result: result, tableNameSingular: "Clinic", tableName: "Clinics" });
+    });
+    SetupViewEndpoint("/Clinics/Delete", async (req, res) => {
+        const result = await apiServer.API_GetClinicByID(req.query.id.toString());
+        res.render("Clinics/Clinics_Delete", { title: "Delete Clinic", result: result, tableNameSingular: "Clinic", tableName: "Clinics" });
+    });
+
+    // Views for Doctors table
+    SetupViewEndpoint("/Doctors", async (req, res) => {
+        const results = await apiServer.API_GetDoctors();
+        res.render("Doctors/Doctors", { title: "Doctors", results: results, tableNameSingular: "Doctor", tableName: "Doctors" });
+    });
+    SetupViewEndpoint("/Doctors/New", async (req, res) => {
+        res.render("Doctors/Doctors_New", { title: "New Doctor", tableNameSingular: "Doctor", tableName: "Doctors" });
+    });
+    SetupViewEndpoint("/Doctors/Edit", async (req, res) => {
+        const result = await apiServer.API_GetDoctorByID(req.query.id.toString());
+        res.render("Doctors/Doctors_Edit", { title: "Edit Doctor", result: result, tableNameSingular: "Doctor", tableName: "Doctors" });
+    });
+    SetupViewEndpoint("/Doctors/Delete", async (req, res) => {
+        const result = await apiServer.API_GetDoctorByID(req.query.id.toString());
+        res.render("Doctors/Doctors_Delete", { title: "Delete Doctor", result: result, tableNameSingular: "Doctor", tableName: "Doctors" });
+    });
+
+    // Views for Products table
+    SetupViewEndpoint("/Products", async (req, res) => {
+        const results = await apiServer.API_GetProducts();
+        res.render("Products/Products", { title: "Products", results: results, tableNameSingular: "Product", tableName: "Products" });
+    });
+    SetupViewEndpoint("/Products/New", async (req, res) => {
+        res.render("Products/Products_New", { title: "New Product", tableNameSingular: "Product", tableName: "Products" });
+    });
+    SetupViewEndpoint("/Products/Edit", async (req, res) => {
+        const result = await apiServer.API_GetProductByID(req.query.id.toString());
+        res.render("Products/Products_Edit", { title: "Edit Product", result: result, tableNameSingular: "Product", tableName: "Products" });
+    });
+    SetupViewEndpoint("/Products/Delete", async (req, res) => {
+        const result = await apiServer.API_GetProductByID(req.query.id.toString());
+        res.render("Products/Products_Delete", { title: "Delete Product", result: result, tableNameSingular: "Product", tableName: "Products" });
+    });
+
+    // Views for Prescriptions table
+    SetupViewEndpoint("/Prescriptions", async (req, res) => {
+        const results = await apiServer.API_GetPrescriptions();
+        res.render("Prescriptions/Prescriptions", { title: "Prescriptions", results: results, tableNameSingular: "Prescription", tableName: "Prescriptions" });
+    });
+    SetupViewEndpoint("/Prescriptions/New", async (req, res) => {
+        res.render("Prescriptions/Prescriptions_New", { title: "New Prescription", tableNameSingular: "Prescription", tableName: "Prescriptions" });
+    });
+    SetupViewEndpoint("/Prescriptions/Edit", async (req, res) => {
+        const result = await apiServer.API_GetPrescriptionByID(req.query.id.toString());
+        res.render("Prescriptions/Prescriptions_Edit", { title: "Edit Prescription", result: result, tableNameSingular: "Prescription", tableName: "Prescriptions" });
+    });
+    SetupViewEndpoint("/Prescriptions/Delete", async (req, res) => {
+        const result = await apiServer.API_GetPrescriptionByID(req.query.id.toString());
+        res.render("Prescriptions/Prescriptions_Delete", { title: "Delete Prescription", result: result, tableNameSingular: "Prescription", tableName: "Prescriptions" });
     });
 }
 module.exports.SetupViewEndpoints = SetupViewEndpoints;

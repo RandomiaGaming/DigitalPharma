@@ -1,7 +1,6 @@
+<h2 class="page-title-text">{{title}}</h2>
 <br />
-<h2 class="page-title-text">Clinics</h2>
-<br />
-<p><a onclick="window.location = '/Clinics/New'">Add New Clinic</a></p>
+<p><a onclick="window.location = window.location.href + '/New'">Add New {{tableNameSingular}}</a></p>
 <br />
 <table>
     <tr>
@@ -14,8 +13,8 @@
     {{#each results}}
     <tr>
         <td>
-            <a onclick="window.location = '/Clinics/Edit?clinicID={{clinicID}}'">Edit</a> |
-            <a onclick="window.location = '/Clinics/Delete?clinicID={{clinicID}}'">Delete</a>
+            <a onclick="window.location = window.location.href + '/Edit?id={{clinicID}}'">Edit</a> |
+            <a onclick="window.location = window.location.href + '/Delete?id={{clinicID}}'">Delete</a>
         </td>
         <td>{{clinicID}}</td>
         <td>{{address}}</td>
