@@ -1,6 +1,7 @@
 {
-    "username": "USERNAME HERE",
-    "password": "PASSWORD HERE",
-    "database": "DATABASE NAME HERE",
-    "port": "PORT HERE"
+    "db_hostname": "DATABASE HOST NAME HERE",
+    "db_username": "DATABASE USERNAME HERE",
+    "db_password": "DATABASE PASSWORD HERE",
+    "db_name": "DATABASE NAME HERE",
+    "app_port": "SERVER PORT HERE"
 }

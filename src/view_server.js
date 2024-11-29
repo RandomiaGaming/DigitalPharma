@@ -1,6 +1,4 @@
-let app;
-let apiServer;
-
+// A helper function to make defining a view endpoint easier
 function SetupViewEndpoint(endpointName, handler) {
     app.get(endpointName, async (req, res) => {
         try {
@@ -12,6 +10,10 @@ function SetupViewEndpoint(endpointName, handler) {
         }
     });
 }
+
+// This function sets the following values for use later and sets up all the endpoints for the views on our website
+let app;
+let apiServer;
 function SetupViewEndpoints(appIn, apiServerIn) {
     app = appIn;
     apiServer = apiServerIn;
@@ -20,7 +22,7 @@ function SetupViewEndpoints(appIn, apiServerIn) {
         res.render("Home", { title: "Home" });
     });
 
-    // Patients Views
+    // Views for Patients table
     SetupViewEndpoint("/Patients", async (req, res) => {
         const results = await apiServer.API_GetPatients();
         res.render("Patients/Patients", { title: "Patients", results: results, tableNameSingular: "Patient", tableName: "Patients" });
@@ -37,5 +39,4 @@ function SetupViewEndpoints(appIn, apiServerIn) {
         res.render("Patients/Patients_Delete", { title: "Delete Patient", result: result, tableNameSingular: "Patient", tableName: "Patients" });
     });
 }
-
 module.exports.SetupViewEndpoints = SetupViewEndpoints;

@@ -1,60 +1,68 @@
-let app;
-let sqlpool;
-
-let username;
-let password;
-let database;
-let port;
-
+// This function loads the following values from environment.json
+let db_hostname;
+let db_username;
+let db_password;
+let db_name;
+let app_port;
 function LoadEnvironment() {
     const fs = require("fs");
-    const environment = JSON.parse(fs.readFileSync("./environment.json", "utf8"));
-    username = environment.username;
-    password = environment.password;
-    database = environment.database;
-    port = environment.port;
+    const environmentText = fs.readFileSync("./environment.json", "utf8");
+    const environment = JSON.parse(environmentText);
+    db_hostname = environment.db_hostname;
+    db_username = environment.db_username;
+    db_password = environment.db_password;
+    db_name = environment.db_name;
+    app_port = environment.app_port;
 }
+
+// This function initializes the following variable to a new sql pool
+let sqlpool;
 function InitSql() {
     const mysql = require("mysql");
     sqlpool = mysql.createPool({
-        host: "classmysql.engr.oregonstate.edu",
-        user: username,
-        password: password,
-        database: database
+        host: db_hostname,
+        user: db_username,
+        password: db_password,
+        database: db_name
     });
-
     const util = require("util");
     sqlpool.query = util.promisify(sqlpool.query);
 }
+
+// This function initializes the express app
+let app;
+let apiServer;
+let viewServer;
 function InitApp() {
-    const path = require("path");
+    // First we initialize express
     const express = require("express");
     app = express();
 
-    // API Server
-    const apiServer = require("./src/api_server");
+    // Then we setup the api server api server
+    apiServer = require("./src/api_server");
     app.use(express.json());
     apiServer.SetupAPIEndpoints(app, sqlpool);
 
-    // View Server
-    const viewServer = require("./src/view_server");
+    // Then we set up the view server
+    viewServer = require("./src/view_server");
     const { engine } = require("express-handlebars");
     app.engine("hbs", engine({
         extname: "hbs",
         defaultLayout: "Main",
-        layoutsDir: path.join(__dirname, "views", "layouts")
+        layoutsDir: "./views/layouts"
     }));
     app.set("view engine", "hbs");
-    app.set("views", path.join(__dirname, "views"));
-    const staticContentPath = path.join(__dirname, "public_html");
-    app.use(express.static(staticContentPath));
+    app.set("views", "./views");
+    app.use(express.static("./public_html"));
     viewServer.SetupViewEndpoints(app, apiServer);
 
-    app.listen(port, () => {
+    // Finally we start the express server
+    app.listen(app_port, () => {
         console.log("Started server!");
     });
 }
 
+// Use the aboce functions to set up and run the server
 function main() {
     LoadEnvironment();
     InitSql();
