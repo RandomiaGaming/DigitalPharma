@@ -27,3 +27,8 @@ async function API_RemovePatient(patientID) {
 async function API_UpdatePatient(patientID, firstName, lastName, dateOfBirth, email, phoneNumber, address) {
     await API_Request("/API/UpdatePatient", { patientID: patientID.toString(), firstName: firstName.toString(), lastName: lastName.toString(), dateOfBirth: dateOfBirth.toString(), email: email.toString(), phoneNumber: phoneNumber.toString(), address: address.toString() });
 }
+
+// Hard reset
+async function API_HardReset() {
+    await API_Request("/API/HardReset", {});
+}

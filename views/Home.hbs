@@ -1,15 +1,16 @@
 <style>
-.home-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-.home-message {
-    width: 50%;
-    font-size: 20pt;
-}
+    .home-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .home-message {
+        width: 50%;
+        font-size: 20pt;
+    }
 </style>
 <div class="home-container">
     <br />
@@ -19,4 +20,25 @@
         Digital Pharama is the furture of prescription manangement with simple, streamlined, and stable service that
         wil quickly become the backbone of great patient care!
     </h1>
+    <br />
+    <form id="form">
+        <fieldset>
+            <div>
+                <input type="submit" value="Reset Entire Database">
+            </div>
+        </fieldset>
+    </form>
 </div>
+<script>
+    document.getElementById("form").addEventListener("submit", async (event) => {
+        try {
+            event.preventDefault();
+            await API_HardReset();
+            alert("Database has been reset.");
+        } catch (err) {
+            const errMsg = `ERROR: ${err.message || err}`;
+            console.error(errMsg);
+            alert(errMsg);
+        }
+    });
+</script>

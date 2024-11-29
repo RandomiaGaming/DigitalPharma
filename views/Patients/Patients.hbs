@@ -1,7 +1,6 @@
+<h2 class="page-title-text">{{title}}</h2>
 <br />
-<h2 class="page-title-text">Patients</h2>
-<br />
-<p><a onclick="window.location = '/Patients/New'">Add New Patient</a></p>
+<p><a onclick="window.location = window.location.href + '/New'">Add New {{tableNameSingular}}</a></p>
 <br />
 <table>
     <tr>
@@ -16,8 +15,8 @@
     {{#each results}}
     <tr>
         <td>
-            <a onclick="window.location = '/Patients/Edit?patientID={{patientID}}'">Edit</a> |
-            <a onclick="window.location = '/Patients/Delete?patientID={{patientID}}'">Delete</a>
+            <a onclick="window.location = window.location.href + '/Edit?patientID={{patientID}}'">Edit</a> |
+            <a onclick="window.location = window.location.href + '/Delete?patientID={{patientID}}'">Delete</a>
         </td>
         <td>{{patientID}}</td>
         <td>{{firstName}} {{lastName}}</td>

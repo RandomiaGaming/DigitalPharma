@@ -23,18 +23,18 @@ function SetupViewEndpoints(appIn, apiServerIn) {
     // Patients Views
     SetupViewEndpoint("/Patients", async (req, res) => {
         const results = await apiServer.API_GetPatients();
-        res.render("Patients/Patients", { title: "Patients", results: results });
+        res.render("Patients/Patients", { title: "Patients", results: results, tableNameSingular: "Patient", tableName: "Patients" });
     });
     SetupViewEndpoint("/Patients/New", async (req, res) => {
-        res.render("Patients/Patients_New", { title: "New Patient" });
+        res.render("Patients/Patients_New", { title: "New Patient", tableNameSingular: "Patient", tableName: "Patients" });
     });
     SetupViewEndpoint("/Patients/Edit", async (req, res) => {
         const result = await apiServer.API_GetPatientByID(req.query.patientID.toString());
-        res.render("Patients/Patients_Edit", { title: "Edit Patient", result: result });
+        res.render("Patients/Patients_Edit", { title: "Edit Patient", result: result, tableNameSingular: "Patient", tableName: "Patients" });
     });
     SetupViewEndpoint("/Patients/Delete", async (req, res) => {
         const result = await apiServer.API_GetPatientByID(req.query.patientID.toString());
-        res.render("Patients/Patients_Delete", { title: "Delete Patient", result: result });
+        res.render("Patients/Patients_Delete", { title: "Delete Patient", result: result, tableNameSingular: "Patient", tableName: "Patients" });
     });
 }
 

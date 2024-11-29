@@ -63,6 +63,18 @@ async function API_UpdatePatient(patientID, firstName, lastName, dateOfBirth, em
     await SQL_Query(query);
 }
 
+// Hard reset
+async function API_HardReset() {
+    const fs = require("fs");
+    const ddlSql = fs.readFileSync("./sql_files/DDL.sql", "utf8");
+    const ddlSqlSplit = ddlSql.split(';').map(query => query.trim()).filter(query => query.length > 0);
+    for (const query of ddlSqlSplit) {
+        if (query) {
+            await sqlpool.query(query);
+        }
+    }
+}
+
 function SetupAPIEndpoint(endpointName, handler) {
     app.post(endpointName, async (req, res) => {
         try {
@@ -96,6 +108,11 @@ function SetupAPIEndpoints(appIn, sqlpoolIn) {
     });
     SetupAPIEndpoint("/API/UpdatePatient", async (req, res) => {
         await API_UpdatePatient(req.body.patientID.toString(), req.body.firstName.toString(), req.body.lastName.toString(), req.body.dateOfBirth.toString(), req.body.email.toString(), req.body.phoneNumber.toString(), req.body.address.toString());
+        res.json({});
+    });
+
+    SetupAPIEndpoint("/API/HardReset", async (req, res) => {
+        await API_HardReset();
         res.json({});
     });
 }
