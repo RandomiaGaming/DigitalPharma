@@ -32,11 +32,11 @@
     </fieldset>
 </form>
 <script>
-document.getElementById('patient-new-form').addEventListener('submit', function (event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
-    API_AddPatient(data.firstName, data.lastName, data.dateOfBirth, data.email, data.phoneNumber, data.address);
-    //window.location = "/Patients";
-});
+    document.getElementById("patient-new-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
+        API_AddPatient(data.firstName, data.lastName, data.dateOfBirth, data.email, data.phoneNumber, data.address);
+        window.location = "/Patients";
+    });
 </script>

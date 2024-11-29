@@ -11,17 +11,19 @@ async function API_Request(endpoint, payload) {
 
 // CRUD operations on Patients table
 async function API_GetPatients() {
-    return await API_Request("/API/GetPatients", { });
+    const results = await API_Request("/API/GetPatients", {});
+    return results;
 }
 async function API_GetPatientByID(patientID) {
-    return await API_Request("/API/GetPatientByID", { patientID: patientID.toString() });
+    const result = await API_Request("/API/GetPatientByID", { patientID: patientID.toString() });
+    return result;
 }
 async function API_AddPatient(firstName, lastName, dateOfBirth, email, phoneNumber, address) {
-    return await API_Request("/API/AddPatient", { firstName: firstName.toString(), lastName: lastName.toString(), dateOfBirth: dateOfBirth.toString(), email: email.toString(), phoneNumber: phoneNumber.toString(), address: address.toString() });
+    await API_Request("/API/AddPatient", { firstName: firstName.toString(), lastName: lastName.toString(), dateOfBirth: dateOfBirth.toString(), email: email.toString(), phoneNumber: phoneNumber.toString(), address: address.toString() });
 }
 async function API_RemovePatient(patientID) {
-    return await API_Request("/API/RemovePatient", { patientID: patientID.toString() });
+    await API_Request("/API/RemovePatient", { patientID: patientID.toString() });
 }
 async function API_UpdatePatient(patientID, firstName, lastName, dateOfBirth, email, phoneNumber, address) {
-    return await API_Request("/API/UpdatePatient", { patientID: patientID.toString(), firstName: firstName.toString(), lastName: lastName.toString(), dateOfBirth: dateOfBirth.toString(), email: email.toString(), phoneNumber: phoneNumber.toString(), address: address.toString() });
+    await API_Request("/API/UpdatePatient", { patientID: patientID.toString(), firstName: firstName.toString(), lastName: lastName.toString(), dateOfBirth: dateOfBirth.toString(), email: email.toString(), phoneNumber: phoneNumber.toString(), address: address.toString() });
 }

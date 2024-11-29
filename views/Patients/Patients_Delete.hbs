@@ -4,7 +4,7 @@
 <h3>CONFIRM PATIENT DELETE</h3>
 
 <form id="patient-delete-form">
-        <fieldset>
+    <fieldset>
         <p>Are you sure you want to delete this patient?</p>
         <table>
             <th>Confirm Patient Information:</th>
@@ -23,11 +23,9 @@
     </fieldset>
 </form>
 <script>
-document.getElementById('patient-delete-form').addEventListener('submit', function (event) {
-    event.preventDefault();
-    const formData = new FromData(event.target);
-    const data = Object.fromEntries(formData.entries());
-    API_RemovePatient(data.patientID);
-    //window.location = "/Patients";
-});
+    document.getElementById("patient-delete-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        API_RemovePatient("{{result.patientID}}");
+        window.location = "/Patients";
+    });
 </script>

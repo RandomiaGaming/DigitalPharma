@@ -6,16 +6,16 @@ async function SQL_Query(query) {
     return results;
 }
 function EscapeSQL(sqlArgument) {
-    const sqlValidCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 0123456789";
-    if (typeof sqlArgument !== "string"){
+    const sqlValidCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 0123456789@+-.,/\\";
+    if (typeof sqlArgument !== "string") {
         sqlArgument = sqlArgument.toString();
     }
     if (typeof sqlArgument !== "string") {
         throw new Error("Argument was invalid. SQL injection guard blocked.");
-    }    
-    for (const char of sqlArgument) {
-        if (!sqlValidCharset.includes(char)) {
-            throw new Error("Argument contained invalid characters. SQL injection guard blocked.");
+    }
+    for (const c of sqlArgument) {
+        if (!sqlValidCharset.includes(c)) {
+            throw new Error(`Argument contained invalid characters. \"${c}\". SQL injection guard blocked.`);
         }
     }
     return `\"${sqlArgument}\"`;
@@ -25,14 +25,12 @@ function FormatSQLResults(results) {
         const transformedRow = {};
         for (const [key, value] of Object.entries(row)) {
             if (value instanceof Date) {
-                // Format date as MM-DD-YYYY
                 const year = value.getFullYear();
                 const month = (value.getMonth() + 1).toString().padStart(2, '0');
                 const day = value.getDate().toString().padStart(2, '0');
                 transformedRow[key] = `${year}-${month}-${day}`;
             } else {
-                // Convert other values to string
-                transformedRow[key] = value != null ? value.toString() : ""; // Handle null or undefined
+                transformedRow[key] = value != null ? value.toString() : "";
             }
         }
         return transformedRow;
@@ -44,14 +42,12 @@ async function API_GetPatients() {
     const query = `SELECT * FROM Patients;`;
     const results = await SQL_Query(query);
     const formattedResults = FormatSQLResults(results);
-    console.log(JSON.stringify(formattedResults));
     return formattedResults;
 }
 async function API_GetPatientByID(patientID) {
     const query = `SELECT * FROM Patients WHERE patientID=${EscapeSQL(patientID)};`;
     const results = await SQL_Query(query);
     const formattedResults = FormatSQLResults(results);
-    console.log(JSON.stringify(formattedResults[0]));
     return formattedResults[0];
 }
 async function API_AddPatient(firstName, lastName, dateOfBirth, email, phoneNumber, address) {
@@ -73,7 +69,7 @@ function SetupAPIEndpoint(endpointName, handler) {
             await handler(req, res);
         } catch (err) {
             const errMsg = `ERROR: ${err.message || err}`;
-            console.log(errMsg);
+            console.error(errMsg);
             res.status(500).json({ error: errMsg });
         }
     });
@@ -82,7 +78,7 @@ function SetupAPIEndpoints(appIn, sqlpoolIn) {
     app = appIn;
     sqlpool = sqlpoolIn;
 
-    SetupAPIEndpoint("/API/GetPatients", async (req, res) => { 
+    SetupAPIEndpoint("/API/GetPatients", async (req, res) => {
         const results = await API_GetPatients();
         res.json(results);
     });
@@ -92,15 +88,15 @@ function SetupAPIEndpoints(appIn, sqlpoolIn) {
     });
     SetupAPIEndpoint("/API/AddPatient", async (req, res) => {
         await API_AddPatient(req.body.firstName.toString(), req.body.lastName.toString(), req.body.dateOfBirth.toString(), req.body.email.toString(), req.body.phoneNumber.toString(), req.body.address.toString());
-        res.json({ });
+        res.json({});
     });
     SetupAPIEndpoint("/API/RemovePatient", async (req, res) => {
         await API_RemovePatient(req.body.patientID.toString());
-        res.json({ });
+        res.json({});
     });
     SetupAPIEndpoint("/API/UpdatePatient", async (req, res) => {
         await API_UpdatePatient(req.body.patientID.toString(), req.body.firstName.toString(), req.body.lastName.toString(), req.body.dateOfBirth.toString(), req.body.email.toString(), req.body.phoneNumber.toString(), req.body.address.toString());
-        res.json({ });
+        res.json({});
     });
 }
 

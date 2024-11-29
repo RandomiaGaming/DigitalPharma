@@ -22,7 +22,7 @@ function InitSql() {
         password: password,
         database: database
     });
-    
+
     const util = require("util");
     sqlpool.query = util.promisify(sqlpool.query);
 }

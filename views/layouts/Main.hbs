@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,26 +8,44 @@
     <link rel="stylesheet" href="/styles.css">
     <script src="/api_client.js"></script>
 </head>
+
 <body>
-<header class="main-header">
-    <div class="main-header-button" onclick="window.location = '/';"><h1 class="main-header-text" style="font-size: 20pt;">DigitalPharma</h1></div>
-    <div class="main-header-button" onclick="window.location = '/Clinics';"><h1 class="main-header-text">Clinics</h1></div>
-    <div class="main-header-button" onclick="window.location = '/Doctors';"><h1 class="main-header-text">Doctors</h1></div>
-    <div class="main-header-button" onclick="window.location = '/Patients';"><h1 class="main-header-text">Patients</h1></div>
-    <div class="main-header-button" onclick="window.location = '/Prescriptions';"><h1 class="main-header-text">Prescriptions</h1></div>
-    <div class="main-header-button" onclick="window.location = '/Products';"><h1 class="main-header-text">Products</h1></div>
-    <div class="main-header-button" onclick="window.location = '/PatientsXDoctors';"><h1 class="main-header-text">PatientsXDoctors</h1></div>
-    <div class="main-header-button" onclick="window.location = '/PrescriptionsXProducts';"><h1 class="main-header-text">PrescriptionXProducts</h1></div>
-</header>
-<main>
-    <div class="main-header-spacer"></div>
-    <div class="main-content-wrapper">
-        {{{body}}}
-    </div>
-    <div class="main-footer-spacer"></div>
-</main>
-<footer class="main-footer">
-    <h1 class="main-footer-text">Created for CS340 by Bon Kees and Finlay Christ</h1>
-</footer>
+    <header class="main-header">
+        <div class="main-header-button" onclick="window.location = '/';">
+            <h1 class="main-header-text" style="font-size: 20pt;">DigitalPharma</h1>
+        </div>
+        <div class="main-header-button" onclick="window.location = '/Clinics';">
+            <h1 class="main-header-text">Clinics</h1>
+        </div>
+        <div class="main-header-button" onclick="window.location = '/Doctors';">
+            <h1 class="main-header-text">Doctors</h1>
+        </div>
+        <div class="main-header-button" onclick="window.location = '/Patients';">
+            <h1 class="main-header-text">Patients</h1>
+        </div>
+        <div class="main-header-button" onclick="window.location = '/Prescriptions';">
+            <h1 class="main-header-text">Prescriptions</h1>
+        </div>
+        <div class="main-header-button" onclick="window.location = '/Products';">
+            <h1 class="main-header-text">Products</h1>
+        </div>
+        <div class="main-header-button" onclick="window.location = '/PatientsXDoctors';">
+            <h1 class="main-header-text">PatientsXDoctors</h1>
+        </div>
+        <div class="main-header-button" onclick="window.location = '/PrescriptionsXProducts';">
+            <h1 class="main-header-text">PrescriptionXProducts</h1>
+        </div>
+    </header>
+    <main>
+        <div class="main-header-spacer"></div>
+        <div class="main-content-wrapper">
+            {{{body}}}
+        </div>
+        <div class="main-footer-spacer"></div>
+    </main>
+    <footer class="main-footer">
+        <h1 class="main-footer-text">Created for CS340 by Bon Kees and Finlay Christ</h1>
+    </footer>
 </body>
+
 </html>
