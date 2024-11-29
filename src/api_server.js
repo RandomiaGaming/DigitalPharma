@@ -7,8 +7,11 @@ async function SQL_Query(query) {
 }
 function EscapeSQL(sqlArgument) {
     const sqlValidCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 0123456789";
+    if (typeof sqlArgument !== "string"){
+        sqlArgument = sqlArgument.toString();
+    }
     if (typeof sqlArgument !== "string") {
-        throw new Error("Argument is not a string. SQL injection guard blocked.");
+        throw new Error("Argument was invalid. SQL injection guard blocked.");
     }    
     for (const char of sqlArgument) {
         if (!sqlValidCharset.includes(char)) {
@@ -17,32 +20,51 @@ function EscapeSQL(sqlArgument) {
     }
     return `\"${sqlArgument}\"`;
 }
+function FormatSQLResults(results) {
+    return results.map(row => {
+        const transformedRow = {};
+        for (const [key, value] of Object.entries(row)) {
+            if (value instanceof Date) {
+                // Format date as MM-DD-YYYY
+                const year = value.getFullYear();
+                const month = (value.getMonth() + 1).toString().padStart(2, '0');
+                const day = value.getDate().toString().padStart(2, '0');
+                transformedRow[key] = `${year}-${month}-${day}`;
+            } else {
+                // Convert other values to string
+                transformedRow[key] = value != null ? value.toString() : ""; // Handle null or undefined
+            }
+        }
+        return transformedRow;
+    });
+}
 
 // CRUD operations on Patients table
 async function API_GetPatients() {
     const query = `SELECT * FROM Patients;`;
     const results = await SQL_Query(query);
-    return results;
+    const formattedResults = FormatSQLResults(results);
+    console.log(JSON.stringify(formattedResults));
+    return formattedResults;
 }
 async function API_GetPatientByID(patientID) {
     const query = `SELECT * FROM Patients WHERE patientID=${EscapeSQL(patientID)};`;
     const results = await SQL_Query(query);
-    return results;
+    const formattedResults = FormatSQLResults(results);
+    console.log(JSON.stringify(formattedResults[0]));
+    return formattedResults[0];
 }
 async function API_AddPatient(firstName, lastName, dateOfBirth, email, phoneNumber, address) {
     const query = `INSERT INTO Patients (firstName, lastName, dateOfBirth, email, phoneNumber, address) VALUES (${EscapeSQL(firstName)}, ${EscapeSQL(lastName)}, ${EscapeSQL(dateOfBirth)}, ${EscapeSQL(email)}, ${EscapeSQL(phoneNumber)}, ${EscapeSQL(address)});`;
-    const results = await SQL_Query(query);
-    return results;
+    await SQL_Query(query);
 }
 async function API_RemovePatient(patientID) {
     const query = `DELETE FROM Patients WHERE patientID=${EscapeSQL(patientID)};`;
-    const results = await SQL_Query(query);
-    return results;
+    await SQL_Query(query);
 }
 async function API_UpdatePatient(patientID, firstName, lastName, dateOfBirth, email, phoneNumber, address) {
     const query = `UPDATE Patients SET firstName=${EscapeSQL(firstName)}, lastName=${EscapeSQL(lastName)}, dateOfBirth=${EscapeSQL(dateOfBirth)}, email=${EscapeSQL(email)}, phoneNumber=${EscapeSQL(phoneNumber)}, address=${EscapeSQL(address)} WHERE patientID=${EscapeSQL(patientID)};`;
-    const results = await SQL_Query(query);
-    return results;
+    await SQL_Query(query);
 }
 
 function SetupAPIEndpoint(endpointName, handler) {
@@ -62,24 +84,23 @@ function SetupAPIEndpoints(appIn, sqlpoolIn) {
 
     SetupAPIEndpoint("/API/GetPatients", async (req, res) => { 
         const results = await API_GetPatients();
-        console.log(`Sending ${JSON.stringify(results)} to api client on GetPatients endpoint`);
         res.json(results);
     });
     SetupAPIEndpoint("/API/GetPatientByID", async (req, res) => {
-        const results = await API_GetPatientByID(req.body.patientID);
-        res.json(results);
+        const result = await API_GetPatientByID(req.body.patientID.toString());
+        res.json(result);
     });
     SetupAPIEndpoint("/API/AddPatient", async (req, res) => {
-        const results = await API_AddPatient(req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
-        res.json(results);
+        await API_AddPatient(req.body.firstName.toString(), req.body.lastName.toString(), req.body.dateOfBirth.toString(), req.body.email.toString(), req.body.phoneNumber.toString(), req.body.address.toString());
+        res.json({ });
     });
     SetupAPIEndpoint("/API/RemovePatient", async (req, res) => {
-        const results = await API_RemovePatient(req.body.patientID);
-        res.json(results);
+        await API_RemovePatient(req.body.patientID.toString());
+        res.json({ });
     });
     SetupAPIEndpoint("/API/UpdatePatient", async (req, res) => {
-        const results = await API_UpdatePatient(req.body.patientID, req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
-        res.json(results);
+        await API_UpdatePatient(req.body.patientID.toString(), req.body.firstName.toString(), req.body.lastName.toString(), req.body.dateOfBirth.toString(), req.body.email.toString(), req.body.phoneNumber.toString(), req.body.address.toString());
+        res.json({ });
     });
 }
 

@@ -1,12 +1,12 @@
 // General API request helpers
 async function API_Request(endpoint, payload) {
     const response = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    console.log(`got ${response} from client.`);
     if (!response.ok) {
         const errMsg = await response.text();
         throw new Error(`API request failed with status code ${response.status} ${errMsg}`);
     }
     const responseData = await response.json();
+    return responseData;
 }
 
 // CRUD operations on Patients table
