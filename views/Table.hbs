@@ -1,0 +1,44 @@
+<h2 class="page-title-text">{{title}}</h2>
+<br />
+<table>
+    <tr>
+        <th>Actions</th>
+        <th>{{tableInfo.entityName}} ID</th>
+        {{#each tableInfo.fields}}
+        <th>{{displayName}}</th>
+        {{/each}}
+    </tr>
+    {{#each results}}
+    <tr>
+        <td>
+            <a onclick="window.location = window.location.href + '/Edit?{{../tableInfo.primaryKeyName}}={{lookup this ../tableInfo.primaryKeyName}}'">Edit</a>
+            |
+            <a onclick="window.location = window.location.href + '/Delete?{{../tableInfo.primaryKeyName}}={{lookup this ../tableInfo.primaryKeyName}}'">Delete</a>
+        </td>
+        <td>{{lookup this ../tableInfo.primaryKeyName}}</td>
+        {{#each ../tableInfo.fields}}
+        <td>{{lookup ../this name}}</td>
+        {{/each}}
+    </tr>
+    {{/each}}
+</table>
+<br />
+<form id="form">
+    <fieldset>
+        <div>
+            <input type="submit" value="Add New {{tableInfo.entityName}}">
+        </div>
+    </fieldset>
+</form>
+<script>
+    document.getElementById("form").addEventListener("submit", async (event) => {
+        try {
+            event.preventDefault();
+            window.location = window.location.href + "/New";
+        } catch (err) {
+            const errMsg = `ERROR: ${err.message || err}`;
+            console.error(errMsg);
+            alert(errMsg);
+        }
+    });
+</script>

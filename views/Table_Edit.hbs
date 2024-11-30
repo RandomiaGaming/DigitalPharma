@@ -2,24 +2,25 @@
 <br />
 <form id="form">
     <fieldset>
-        <legend><strong>Add {{tableNameSingular}}</strong></legend>
         <table>
             <tr>
-                <td><label for="address">Address: </label> <input type="text" value="{{result.address}}" name="address"
-                        id="address"></td>
+                <td>
+                    <label for="{{tableInfo.primaryKeyName}}">{{tableInfo.entityName}} ID: </label>
+                    <input type="text" name="{{tableInfo.primaryKeyName}}" id="{{tableInfo.primaryKeyName}}" value="{{lookup result tableInfo.primaryKeyName}}" readonly>
+                </td>
             </tr>
+            {{#each tableInfo.fields}}
             <tr>
-                <td><label for="email">Email: </label> <input type="text" value="{{result.email}}" name="email"
-                        id="email"></td>
+                <td>
+                    <label for="{{name}}">{{displayName}}: </label>
+                    <input type="{{type}}" name="{{name}}" id="{{name}}" value="{{lookup ../result name}}">
+                </td>
             </tr>
-            <tr>
-                <td><label for="phoneNumber">Phone Number: </label> <input type="text" value="{{result.phoneNumber}}"
-                        name="phoneNumber" id="phoneNumber"></td>
-            </tr>
+            {{/each}}
         </table>
         <br />
         <div>
-            <input type="submit" value="Add {{tableNameSingular}}">
+            <input type="submit" value="Update {{tableInfo.entityName}}">
             <input type="button" value="Cancel"
                 onclick="window.location = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))">
         </div>
@@ -31,7 +32,10 @@
             event.preventDefault();
             const formData = new FormData(event.target);
             const data = Object.fromEntries(formData.entries());
-            await API_AddClinic(data.address, data.email, data.phoneNumber);
+            await API_Update{{tableInfo.entityName}}(
+                {{lookup result tableInfo.primaryKeyName}},
+                {{#each tableInfo.fields}}data.{{name}}, {{/each}}
+            );
             window.location = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
         } catch (err) {
             const errMsg = `ERROR: ${err.message || err}`;

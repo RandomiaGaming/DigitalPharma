@@ -1,0 +1,39 @@
+<h2 class="page-title-text">{{title}}</h2>
+<br />
+<form id="form">
+    <fieldset>
+        <table>
+            {{#each tableInfo.fields}}
+            <tr>
+                <td>
+                    <label for="{{name}}">{{displayName}}: </label>
+                    <input type="{{type}}" name="{{name}}" id="{{name}}">
+                </td>
+            </tr>
+            {{/each}}
+        </table>
+        <br />
+        <div>
+            <input type="submit" value="Add {{tableInfo.entityName}}">
+            <input type="button" value="Cancel"
+                onclick="window.location = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))">
+        </div>
+    </fieldset>
+</form>
+<script>
+    document.getElementById("form").addEventListener("submit", async (event) => {
+        try {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            await API_Add{{tableInfo.entityName}}(
+                {{#each tableInfo.fields}}data.{{name}}, {{/each}}
+            );
+            window.location = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+        } catch (err) {
+            const errMsg = `ERROR: ${err.message || err}`;
+            console.error(errMsg);
+            alert(errMsg);
+        }
+    });
+</script>

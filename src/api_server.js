@@ -313,13 +313,13 @@ module.exports.API_UpdateClinic = API_UpdateClinic;
 
 // CRUD operations for Doctors table
 async function API_GetDoctors() {
-    const query = `SELECT firstName, lastName, email, phoneNumber, clinicID FROM Doctors;`;
+    const query = `SELECT doctorID, firstName, lastName, email, phoneNumber, clinicID FROM Doctors;`;
     const results = await SQL_Query(query);
     return results;
 }
 module.exports.API_GetDoctors = API_GetDoctors;
 async function API_GetDoctorByID(doctorID) {
-    const query = `SELECT firstName, lastName, email, phoneNumber, clinicID FROM Doctors WHERE doctorID=${EscapeSQL(doctorID)};`;
+    const query = `SELECT doctorID, firstName, lastName, email, phoneNumber, clinicID FROM Doctors WHERE doctorID=${EscapeSQL(doctorID)};`;
     const results = await SQL_Query(query);
     return results[0];
 }
@@ -342,13 +342,13 @@ module.exports.API_UpdateDoctor = API_UpdateDoctor;
 
 // CRUD operations for Products table
 async function API_GetProducts() {
-    const query = `SELECT genericName, brandName, description, price FROM Products;`;
+    const query = `SELECT productID, genericName, brandName, description, price FROM Products;`;
     const results = await SQL_Query(query);
     return results;
 }
 module.exports.API_GetProducts = API_GetProducts;
 async function API_GetProductByID(productID) {
-    const query = `SELECT genericName, brandName, description, price FROM Products WHERE productID=${EscapeSQL(productID)};`;
+    const query = `SELECT productID, genericName, brandName, description, price FROM Products WHERE productID=${EscapeSQL(productID)};`;
     const results = await SQL_Query(query);
     return results[0];
 }
@@ -371,13 +371,13 @@ module.exports.API_UpdateProduct = API_UpdateProduct;
 
 // CRUD operations for Prescriptions table
 async function API_GetPrescriptions() {
-    const query = `SELECT doctorID, patientID, quantity, numberOfRefills, instructions FROM Prescriptions;`;
+    const query = `SELECT prescriptionID, doctorID, patientID, quantity, numberOfRefills, instructions FROM Prescriptions;`;
     const results = await SQL_Query(query);
     return results;
 }
 module.exports.API_GetPrescriptions = API_GetPrescriptions;
 async function API_GetPrescriptionByID(prescriptionID) {
-    const query = `SELECT doctorID, patientID, quantity, numberOfRefills, instructions FROM Prescriptions WHERE prescriptionID=${EscapeSQL(prescriptionID)};`;
+    const query = `SELECT prescriptionID, doctorID, patientID, quantity, numberOfRefills, instructions FROM Prescriptions WHERE prescriptionID=${EscapeSQL(prescriptionID)};`;
     const results = await SQL_Query(query);
     return results[0];
 }

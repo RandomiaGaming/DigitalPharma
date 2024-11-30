@@ -49,7 +49,15 @@ function InitApp() {
     app.engine("hbs", engine({
         extname: "hbs",
         defaultLayout: "Main",
-        layoutsDir: "./views/layouts"
+        layoutsDir: "./views/layouts",
+        helpers: {
+            toLower: (value) => {
+                if (typeof value !== "string") {
+                    return value;
+                }
+                return value.toLowerCase();
+            }
+        }
     }));
     app.set("view engine", "hbs");
     app.set("views", "./views");
