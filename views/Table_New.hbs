@@ -4,12 +4,38 @@
     <fieldset>
         <table>
             {{#each tableInfo.fields}}
-            <tr>
-                <td>
-                    <label for="{{name}}">{{displayName}}: </label>
-                    <input type="{{type}}" name="{{name}}" id="{{name}}">
-                </td>
-            </tr>
+            <!--
+            root
+            root.tableInfo.fields[i] // Current field from fields list
+            -->
+                <tr>
+                    <td>
+                        {{#if isForeignKey}}
+                            <label for="{{name}}">{{displayName}}: </label>
+                            <select id="{{name}}" name="{{name}}">
+                                {{#with (lookup ../this foreignTableName)}}
+                                <!--
+                                root
+                                root.tableInfo.fields[i] // Current field from fields list
+                                root[root.tableInfo.fields[i].foreignTableName] // Refrence names list for current field
+                                -->
+                                    {{#keyvalues this}}
+                                    <!--
+                                    root
+                                    root.tableInfo.fields[i] // Current field from fields list
+                                    root[root.tableInfo.fields[i].foreignTableName] // Refrence names list for current field
+                                    root[root.tableInfo.fields[i].foreignTableName][i] // A specific refrence name from the list
+                                    -->
+                                        <option value="{{key}}">{{key}} ({{value}})</option>
+                                    {{/keyvalues}}
+                                {{/with}}
+                            </select>
+                        {{else}}
+                            <label for="{{name}}">{{displayName}}: </label>
+                            <input type="{{type}}" name="{{name}}" id="{{name}}">
+                        {{/if}}
+                    </td>
+                </tr>
             {{/each}}
         </table>
         <br />

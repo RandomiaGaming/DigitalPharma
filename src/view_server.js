@@ -11,6 +11,52 @@ function SetupViewEndpoint(endpointName, handler) {
     });
 }
 
+async function GetReferenceNamesForClinics() {
+    const results = await apiServer.API_GetClinics();
+    const output = { };
+    for(result of results) {
+        output[result.clinicID] = result.address;
+    };
+    return output;
+}
+
+async function GetReferenceNamesForDoctors() {
+    const results = await apiServer.API_GetDoctors();
+    const output = { };
+    for(result of results) {
+        output[result.doctorID] = result.firstName + " " + result.lastName;
+    };
+    return output;
+}
+
+async function GetReferenceNamesForPatients() {
+    const results = await apiServer.API_GetPatients();
+    const output = { };
+    for(result of results) {
+        output[result.patientID] = result.firstName + " " + result.lastName;
+    };
+    return output;
+}
+
+async function GetReferenceNamesForPrescriptions() {
+    const results = await apiServer.API_GetPrescriptions();
+    const output = { };
+    for(result of results) {
+        const patient = await apiServer.API_GetPatientByID(result.patientID);
+        output[result.prescriptionID] = "Prescription for " + patient.firstName + " " + patient.lastName;
+    };
+    return output;
+}
+
+async function GetReferenceNamesForProducts() {
+    const results = await apiServer.API_GetProducts();
+    const output = { };
+    for(result of results) {
+        output[result.productID] = result.genericName;
+    };
+    return output;
+}
+
 function SetupViewEndpointsForClinics() {
     const clinicsTableInfo = {
         name: "Clinics",
@@ -19,8 +65,8 @@ function SetupViewEndpointsForClinics() {
         fields: [
             // address, email, phoneNumber
             { displayName: "Address", name: "address", type: "text" },
-            { displayName: "Email", name: "email", type: "text" },
-            { displayName: "Phone Number", name: "phoneNumber", type: "text" }
+            { displayName: "Email", name: "email", type: "email" },
+            { displayName: "Phone Number", name: "phoneNumber", type: "tel" }
         ]
     };
     SetupViewEndpoint("/Clinics", async (req, res) => {
@@ -64,9 +110,9 @@ function SetupViewEndpointsForDoctors() {
             // firstName, lastName, email, phoneNumber, clinicID
             { displayName: "First Name", name: "firstName", type: "text" },
             { displayName: "Last Name", name: "lastName", type: "text" },
-            { displayName: "Email", name: "email", type: "text" },
-            { displayName: "Phone Number", name: "phoneNumber", type: "text" },
-            { displayName: "Clinic ID", name: "clinicID", type: "text" }
+            { displayName: "Email", name: "email", type: "email" },
+            { displayName: "Phone Number", name: "phoneNumber", type: "tel" },
+            { displayName: "Clinic ID", name: "clinicID", type: "text", isForeignKey: true, foreignTableName: "Clinics" }
         ]
     };
     SetupViewEndpoint("/Doctors", async (req, res) => {
@@ -74,13 +120,15 @@ function SetupViewEndpointsForDoctors() {
         res.render("Table", {
             title: "Doctors List",
             results: results,
-            tableInfo: doctorsTableInfo
+            tableInfo: doctorsTableInfo,
+            Clinics: await GetReferenceNamesForClinics()
         });
     });
     SetupViewEndpoint("/Doctors/New", async (req, res) => {
         res.render("Table_New", {
             title: "New Doctor",
-            tableInfo: doctorsTableInfo
+            tableInfo: doctorsTableInfo,
+            Clinics: await GetReferenceNamesForClinics()
         });
     });
     SetupViewEndpoint("/Doctors/Edit", async (req, res) => {
@@ -88,7 +136,8 @@ function SetupViewEndpointsForDoctors() {
         res.render("Table_Edit", {
             title: "Edit Doctor",
             result: result,
-            tableInfo: doctorsTableInfo
+            tableInfo: doctorsTableInfo,
+            Clinics: await GetReferenceNamesForClinics()
         });
     });
     SetupViewEndpoint("/Doctors/Delete", async (req, res) => {
@@ -96,7 +145,8 @@ function SetupViewEndpointsForDoctors() {
         res.render("Table_Delete", {
             title: "Delete Doctor",
             result: result,
-            tableInfo: doctorsTableInfo
+            tableInfo: doctorsTableInfo,
+            Clinics: await GetReferenceNamesForClinics()
         });
     });
 }
@@ -108,11 +158,11 @@ function SetupViewEndpointsForPatients() {
         primaryKeyName: "patientID",
         fields: [
             // firstName, lastName, dateOfBirth, email, phoneNumber, address
-            { displayName: "First Name", name: "firstName", type: "text" },
+            { displayName: "First Name", name: "firstName",  type: "text" },
             { displayName: "Last Name", name: "lastName", type: "text" },
             { displayName: "Date Of Birth", name: "dateOfBirth", type: "date" },
-            { displayName: "Email", name: "email", type: "text" },
-            { displayName: "Phone Number", name: "phoneNumber", type: "text" },
+            { displayName: "Email", name: "email", type: "email" },
+            { displayName: "Phone Number", name: "phoneNumber", type: "tel" },
             { displayName: "Address", name: "address", type: "text" }
         ]
     };
@@ -155,9 +205,9 @@ function SetupViewEndpointsForPrescriptions() {
         primaryKeyName: "prescriptionID",
         fields: [
             // doctorID, patientID, quantity, numberOfRefills, instructions
-            { displayName: "Doctor ID", name: "doctorID", type: "text" },
-            { displayName: "Patient ID", name: "patientID", type: "text" },
-            { displayName: "Quantity", name: "quantity", type: "text" },
+            { displayName: "Doctor ID", name: "doctorID", type: "text", isForeignKey: true, foreignTableName: "Doctors" },
+            { displayName: "Patient ID", name: "patientID", type: "text", isForeignKey: true, foreignTableName: "Patients" },
+            { displayName: "Quantity", name: "quantity", type: "number" },
             { displayName: "Number Of Refills", name: "numberOfRefills", type: "text" },
             { displayName: "Instructions", name: "instructions", type: "text" }
         ]
@@ -167,13 +217,17 @@ function SetupViewEndpointsForPrescriptions() {
         res.render("Table", {
             title: "Prescriptions List",
             results: results,
-            tableInfo: prescriptionsTableInfo
+            tableInfo: prescriptionsTableInfo,
+            Doctors: await GetReferenceNamesForDoctors(),
+            Patients: await GetReferenceNamesForPatients()
         });
     });
     SetupViewEndpoint("/Prescriptions/New", async (req, res) => {
         res.render("Table_New", {
             title: "New Prescription",
-            tableInfo: prescriptionsTableInfo
+            tableInfo: prescriptionsTableInfo,
+            Doctors: await GetReferenceNamesForDoctors(),
+            Patients: await GetReferenceNamesForPatients()
         });
     });
     SetupViewEndpoint("/Prescriptions/Edit", async (req, res) => {
@@ -181,7 +235,9 @@ function SetupViewEndpointsForPrescriptions() {
         res.render("Table_Edit", {
             title: "Edit Prescription",
             result: result,
-            tableInfo: prescriptionsTableInfo
+            tableInfo: prescriptionsTableInfo,
+            Doctors: await GetReferenceNamesForDoctors(),
+            Patients: await GetReferenceNamesForPatients()
         });
     });
     SetupViewEndpoint("/Prescriptions/Delete", async (req, res) => {
@@ -189,7 +245,9 @@ function SetupViewEndpointsForPrescriptions() {
         res.render("Table_Delete", {
             title: "Delete Prescription",
             result: result,
-            tableInfo: prescriptionsTableInfo
+            tableInfo: prescriptionsTableInfo,
+            Doctors: await GetReferenceNamesForDoctors(),
+            Patients: await GetReferenceNamesForPatients()
         });
     });
 }
@@ -204,7 +262,7 @@ function SetupViewEndpointsForProducts() {
             { displayName: "Generic Name", name: "genericName", type: "text" },
             { displayName: "Brand Name", name: "brandName", type: "text" },
             { displayName: "Description", name: "description", type: "text" },
-            { displayName: "Price", name: "price", type: "text" }
+            { displayName: "Price", name: "price", type: "number" }
         ]
     };
     SetupViewEndpoint("/Products", async (req, res) => {
@@ -246,8 +304,8 @@ function SetupViewEndpointsForPatientsXDoctors() {
         primaryKeyName: "patientsXDoctorsID",
         fields: [
             // patientID, doctorID
-            { displayName: "Patient ID", name: "patientID", type: "text" },
-            { displayName: "Doctor ID", name: "doctorID", type: "text" }
+            { displayName: "Patient ID", name: "patientID", type: "text", isForeignKey: true, foreignTableName: "Patients" },
+            { displayName: "Doctor ID", name: "doctorID", type: "text", isForeignKey: true, foreignTableName: "Doctors" }
         ]
     };
     SetupViewEndpoint("/PatientsXDoctors", async (req, res) => {
@@ -255,13 +313,17 @@ function SetupViewEndpointsForPatientsXDoctors() {
         res.render("Table", {
             title: "PatientsXDoctors List",
             results: results,
-            tableInfo: patientsXDoctorsTableInfo
+            tableInfo: patientsXDoctorsTableInfo,
+            Patients: await GetReferenceNamesForPatients(),
+            Doctors: await GetReferenceNamesForDoctors()
         });
     });
     SetupViewEndpoint("/PatientsXDoctors/New", async (req, res) => {
         res.render("Table_New", {
             title: "New PatientsXDoctors",
-            tableInfo: patientsXDoctorsTableInfo
+            tableInfo: patientsXDoctorsTableInfo,
+            Patients: await GetReferenceNamesForPatients(),
+            Doctors: await GetReferenceNamesForDoctors()
         });
     });
     SetupViewEndpoint("/PatientsXDoctors/Edit", async (req, res) => {
@@ -269,7 +331,9 @@ function SetupViewEndpointsForPatientsXDoctors() {
         res.render("Table_Edit", {
             title: "Edit PatientsXDoctors",
             result: result,
-            tableInfo: patientsXDoctorsTableInfo
+            tableInfo: patientsXDoctorsTableInfo,
+            Patients: await GetReferenceNamesForPatients(),
+            Doctors: await GetReferenceNamesForDoctors()
         });
     });
     SetupViewEndpoint("/PatientsXDoctors/Delete", async (req, res) => {
@@ -277,7 +341,9 @@ function SetupViewEndpointsForPatientsXDoctors() {
         res.render("Table_Delete", {
             title: "Delete PatientsXDoctors",
             result: result,
-            tableInfo: patientsXDoctorsTableInfo
+            tableInfo: patientsXDoctorsTableInfo,
+            Patients: await GetReferenceNamesForPatients(),
+            Doctors: await GetReferenceNamesForDoctors()
         });
     });
 }
@@ -289,8 +355,8 @@ function SetupViewEndpointsForPrescriptionsXProducts() {
         primaryKeyName: "prescriptionsXProductsID",
         fields: [
             // prescriptionID, productID
-            { displayName: "Prescription ID", name: "prescriptionID", type: "text" },
-            { displayName: "Product ID", name: "productID", type: "text" }
+            { displayName: "Prescription ID", name: "prescriptionID", type: "text", isForeignKey: true, foreignTableName: "Prescriptions" },
+            { displayName: "Product ID", name: "productID", type: "text", isForeignKey: true, foreignTableName: "Products" }
         ]
     };
     SetupViewEndpoint("/PrescriptionsXProducts", async (req, res) => {
@@ -298,13 +364,17 @@ function SetupViewEndpointsForPrescriptionsXProducts() {
         res.render("Table", {
             title: "PrescriptionsXProducts List",
             results: results,
-            tableInfo: prescriptionsXProductsTableInfo
+            tableInfo: prescriptionsXProductsTableInfo,
+            Prescriptions: await GetReferenceNamesForPrescriptions(),
+            Products: await GetReferenceNamesForProducts()
         });
     });
     SetupViewEndpoint("/PrescriptionsXProducts/New", async (req, res) => {
         res.render("Table_New", {
             title: "New PrescriptionsXProducts",
-            tableInfo: prescriptionsXProductsTableInfo
+            tableInfo: prescriptionsXProductsTableInfo,
+            Prescriptions: await GetReferenceNamesForPrescriptions(),
+            Products: await GetReferenceNamesForProducts()
         });
     });
     SetupViewEndpoint("/PrescriptionsXProducts/Edit", async (req, res) => {
@@ -312,7 +382,9 @@ function SetupViewEndpointsForPrescriptionsXProducts() {
         res.render("Table_Edit", {
             title: "Edit PrescriptionsXProducts",
             result: result,
-            tableInfo: prescriptionsXProductsTableInfo
+            tableInfo: prescriptionsXProductsTableInfo,
+            Prescriptions: await GetReferenceNamesForPrescriptions(),
+            Products: await GetReferenceNamesForProducts()
         });
     });
     SetupViewEndpoint("/PrescriptionsXProducts/Delete", async (req, res) => {
@@ -320,7 +392,9 @@ function SetupViewEndpointsForPrescriptionsXProducts() {
         res.render("Table_Delete", {
             title: "Delete PrescriptionsXProducts",
             result: result,
-            tableInfo: prescriptionsXProductsTableInfo
+            tableInfo: prescriptionsXProductsTableInfo,
+            Prescriptions: await GetReferenceNamesForPrescriptions(),
+            Products: await GetReferenceNamesForProducts()
         });
     });
 }

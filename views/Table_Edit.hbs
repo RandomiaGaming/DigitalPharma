@@ -1,3 +1,6 @@
+<!--
+root
+-->
 <h2 class="page-title-text">{{title}}</h2>
 <br />
 <form id="form">
@@ -10,12 +13,41 @@
                 </td>
             </tr>
             {{#each tableInfo.fields}}
-            <tr>
-                <td>
-                    <label for="{{name}}">{{displayName}}: </label>
-                    <input type="{{type}}" name="{{name}}" id="{{name}}" value="{{lookup ../result name}}">
-                </td>
-            </tr>
+            <!--
+            root
+            root.tableInfo.fields[i] // Current field from fields list
+            -->
+                <tr>
+                    <td>
+                        {{#if isForeignKey}}
+                            <label for="{{name}}">{{displayName}}: </label>
+                            <select id="{{name}}" name="{{name}}">
+                                {{#with (lookup ../this foreignTableName)}}
+                                <!--
+                                root
+                                root.tableInfo.fields[i] // Current field from fields list
+                                root[root.tableInfo.fields[i].foreignTableName] // Refrence names list for current field
+                                -->
+                                    {{#keyvalues this}}
+                                    <!--
+                                    root
+                                    root.tableInfo.fields[i] // Current field from fields list
+                                    root[root.tableInfo.fields[i].foreignTableName] // Refrence names list for current field
+                                    root[root.tableInfo.fields[i].foreignTableName][i] // A specific refrence name from the list
+                                    -->
+                                        <option value="{{key}}">{{key}} ({{value}})</option>
+                                    {{/keyvalues}}
+                                {{/with}}
+                            </select>
+                            <script>
+                                document.getElementById("{{name}}").value = "{{lookup ../result name}}";
+                            </script>
+                        {{else}}
+                            <label for="{{name}}">{{displayName}}: </label>
+                            <input type="{{type}}" name="{{name}}" id="{{name}}" value="{{lookup ../result name}}">
+                        {{/if}}
+                    </td>
+                </tr>
             {{/each}}
         </table>
         <br />

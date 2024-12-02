@@ -51,11 +51,15 @@ function InitApp() {
         defaultLayout: "Main",
         layoutsDir: "./views/layouts",
         helpers: {
-            toLower: (value) => {
-                if (typeof value !== "string") {
-                    return value;
-                }
-                return value.toLowerCase();
+            json: function (context) {
+                return JSON.stringify(context);
+            },
+            keyvalues: function (obj, options) {
+            const keys = Object.keys(obj);
+            return keys.map(key => {
+                const context = { key: key, value: obj[key] };
+                return options.fn(context);
+            }).join('');
             }
         }
     }));

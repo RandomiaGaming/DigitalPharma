@@ -119,3 +119,7 @@ input {
     background-color: rgba(0, 0, 0, 0);
     border: 1px solid white;
 }
+
+select, option {
+    background-color: #333333;
+}

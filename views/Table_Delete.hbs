@@ -1,3 +1,6 @@
+<!--
+root
+-->
 <h2 class="page-title-text">{{title}}</h2>
 <br />
 <h3>Are you sure you want to delete this {{tableInfo.entityName}}?</h3>
@@ -6,13 +9,42 @@
     <tr>
         <th>{{tableInfo.entityName}} ID</th>
         {{#each tableInfo.fields}}
-        <th>{{displayName}}</th>
+        <!--
+        root
+        root.tableInfo.fields[i] // Current field from fields list
+        -->
+            <th>{{displayName}}</th>
         {{/each}}
     </tr>
     <tr>
         <td>{{lookup result tableInfo.primaryKeyName}}</td>
         {{#each tableInfo.fields}}
-        <td>{{lookup ../result name}}</td>
+        <!--
+        root
+        root.tableInfo.fields[i] // Current field from fields list
+        -->
+            <td>
+                {{#if isForeignKey}}
+                    {{#with (lookup ../result name)}}
+                    <!--
+                    root
+                    root.tableInfo.fields[i] // Current field from fields list
+                    root.results[i][root.tableInfo.fields[i].name] // Value of current field in current entity
+                    -->
+                        {{#with (lookup ../../this ../foreignTableName)}}
+                        <!--
+                        root
+                        root.tableInfo.fields[i] // Current field from fields list
+                        root.results[i][root.tableInfo.fields[i].name] // Value of current field in current entity
+                        root[root.tableInfo.fields[i].foreignTableName] // Refrence names list for current field
+                        -->
+                            {{../this}} ({{lookup this ../this}})
+                        {{/with}}
+                    {{/with}}
+                {{else}}
+                    {{lookup ../result name}}
+                {{/if}}
+            </td>
         {{/each}}
     </tr>
 </table>
@@ -21,8 +53,7 @@
     <fieldset>
         <div>
             <input type="submit" value="Yes (Delete It)">
-            <input type="button" value="No (Cancel)"
-                onclick="window.location = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))">
+            <input type="button" value="No (Cancel)" onclick="window.location = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))">
         </div>
     </fieldset>
 </form>

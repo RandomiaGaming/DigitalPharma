@@ -1,3 +1,6 @@
+<!--
+root
+-->
 <h2 class="page-title-text">{{title}}</h2>
 <br />
 <table>
@@ -5,21 +8,57 @@
         <th>Actions</th>
         <th>{{tableInfo.entityName}} ID</th>
         {{#each tableInfo.fields}}
-        <th>{{displayName}}</th>
+        <!--
+        root
+        root.tableInfo.fields[i] // Current field from fields list
+        -->
+            <th>{{displayName}}</th>
         {{/each}}
     </tr>
     {{#each results}}
-    <tr>
-        <td>
-            <a onclick="window.location = window.location.href + '/Edit?{{../tableInfo.primaryKeyName}}={{lookup this ../tableInfo.primaryKeyName}}'">Edit</a>
-            |
-            <a onclick="window.location = window.location.href + '/Delete?{{../tableInfo.primaryKeyName}}={{lookup this ../tableInfo.primaryKeyName}}'">Delete</a>
-        </td>
-        <td>{{lookup this ../tableInfo.primaryKeyName}}</td>
-        {{#each ../tableInfo.fields}}
-        <td>{{lookup ../this name}}</td>
-        {{/each}}
-    </tr>
+    <!--
+    root
+    root.results[i] // Current entity from table
+    -->
+        <tr>
+            <td>
+                <a onclick="window.location = window.location.href + '/Edit?{{../tableInfo.primaryKeyName}}={{lookup this ../tableInfo.primaryKeyName}}'">Edit</a>
+                |
+                <a onclick="window.location = window.location.href + '/Delete?{{../tableInfo.primaryKeyName}}={{lookup this ../tableInfo.primaryKeyName}}'">Delete</a>
+            </td>
+            <td>{{lookup this ../tableInfo.primaryKeyName}}</td>
+            {{#each ../tableInfo.fields}}
+            <!--
+            root
+            root.results[i] // Current entity from table
+            root.tableInfo.fields[i] // Current field from fields list
+            -->
+                <td>
+                    {{#if isForeignKey}}
+                        {{#with (lookup ../this name)}}
+                        <!--
+                        root
+                        root.results[i] // Current entity from table
+                        root.tableInfo.fields[i] // Current field from fields list
+                        root.results[i][root.tableInfo.fields[i].name] // Value of current field in current entity
+                        -->
+                            {{#with (lookup ../../../this ../foreignTableName)}}
+                            <!--
+                            root
+                            root.results[i] // Current entity from table
+                            root.tableInfo.fields[i] // Current field from fields list
+                            root.results[i][root.tableInfo.fields[i].name] // Value of current field in current entity
+                            root[root.tableInfo.fields[i].foreignTableName] // Refrence names list for current field
+                            -->
+                                {{../this}} ({{lookup this ../this}})
+                            {{/with}}
+                        {{/with}}
+                    {{else}}
+                        {{lookup ../this name}}
+                    {{/if}}
+                </td>
+            {{/each}}
+        </tr>
     {{/each}}
 </table>
 <br />
