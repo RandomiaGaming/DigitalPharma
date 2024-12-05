@@ -13,7 +13,16 @@ root
         root
         root.tableInfo.fields[i] // Current field from fields list
         -->
-            <th>{{displayName}}</th>
+            {{#if isHidden}}
+            {{else}}
+                <th>
+                    {{#if hasCustomName}}
+                        {{customName}}
+                    {{else}}
+                        {{displayName}}
+                    {{/if}}
+                </th>
+            {{/if}}
         {{/each}}
     </tr>
     <tr>
@@ -23,28 +32,35 @@ root
         root
         root.tableInfo.fields[i] // Current field from fields list
         -->
-            <td>
-                {{#if isForeignKey}}
-                    {{#with (lookup ../result name)}}
-                    <!--
-                    root
-                    root.tableInfo.fields[i] // Current field from fields list
-                    root.results[i][root.tableInfo.fields[i].name] // Value of current field in current entity
-                    -->
-                        {{#with (lookup ../../this ../foreignTableName)}}
+            {{#if isHidden}}
+            {{else}}
+                <td>
+                    {{#if isForeignKey}}
+                        {{#with (lookup ../result name)}}
                         <!--
                         root
                         root.tableInfo.fields[i] // Current field from fields list
                         root.results[i][root.tableInfo.fields[i].name] // Value of current field in current entity
-                        root[root.tableInfo.fields[i].foreignTableName] // Refrence names list for current field
                         -->
-                            {{../this}} ({{lookup this ../this}})
+                            {{#with (lookup ../../this ../foreignTableName)}}
+                            <!--
+                            root
+                            root.tableInfo.fields[i] // Current field from fields list
+                            root.results[i][root.tableInfo.fields[i].name] // Value of current field in current entity
+                            root[root.tableInfo.fields[i].foreignTableName] // Refrence names list for current field
+                            -->
+                                {{../this}} ({{lookup this ../this}})
+                            {{/with}}
                         {{/with}}
-                    {{/with}}
-                {{else}}
-                    {{lookup ../result name}}
-                {{/if}}
-            </td>
+                    {{else}}
+                        {{#if hasCustomFormat}}
+                            {{eval customFormat ../result}}
+                        {{else}}
+                            {{lookup ../result name}}
+                        {{/if}}
+                    {{/if}}
+                </td>
+            {{/if}}
         {{/each}}
     </tr>
 </table>

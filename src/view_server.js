@@ -108,8 +108,8 @@ function SetupViewEndpointsForDoctors() {
         primaryKeyName: "doctorID",
         fields: [
             // firstName, lastName, email, phoneNumber, clinicID
-            { displayName: "First Name", name: "firstName", type: "text" },
-            { displayName: "Last Name", name: "lastName", type: "text" },
+            { displayName: "First Name", name: "firstName", type: "text", hasCustomFormat: true, customFormat: "{{firstName}} {{lastName}}", hasCustomName: true, customName: "Name" },
+            { displayName: "Last Name", name: "lastName", type: "text", isHidden: true },
             { displayName: "Email", name: "email", type: "email" },
             { displayName: "Phone Number", name: "phoneNumber", type: "tel" },
             { displayName: "Clinic ID", name: "clinicID", type: "text", isForeignKey: true, foreignTableName: "Clinics" }
@@ -158,8 +158,8 @@ function SetupViewEndpointsForPatients() {
         primaryKeyName: "patientID",
         fields: [
             // firstName, lastName, dateOfBirth, email, phoneNumber, address
-            { displayName: "First Name", name: "firstName",  type: "text" },
-            { displayName: "Last Name", name: "lastName", type: "text" },
+            { displayName: "First Name", name: "firstName",  type: "text", hasCustomFormat: true, customFormat: "{{firstName}} {{lastName}}", hasCustomName: true, customName: "Name" },
+            { displayName: "Last Name", name: "lastName", type: "text", isHidden: true },
             { displayName: "Date Of Birth", name: "dateOfBirth", type: "date" },
             { displayName: "Email", name: "email", type: "email" },
             { displayName: "Phone Number", name: "phoneNumber", type: "tel" },
@@ -208,7 +208,7 @@ function SetupViewEndpointsForPrescriptions() {
             { displayName: "Doctor ID", name: "doctorID", type: "text", isForeignKey: true, foreignTableName: "Doctors" },
             { displayName: "Patient ID", name: "patientID", type: "text", isForeignKey: true, foreignTableName: "Patients" },
             { displayName: "Quantity", name: "quantity", type: "number" },
-            { displayName: "Number Of Refills", name: "numberOfRefills", type: "text" },
+            { displayName: "Number Of Refills", name: "numberOfRefills", type: "number" },
             { displayName: "Instructions", name: "instructions", type: "text" }
         ]
     };
@@ -262,7 +262,7 @@ function SetupViewEndpointsForProducts() {
             { displayName: "Generic Name", name: "genericName", type: "text" },
             { displayName: "Brand Name", name: "brandName", type: "text" },
             { displayName: "Description", name: "description", type: "text" },
-            { displayName: "Price", name: "price", type: "number" }
+            { displayName: "Price", name: "price", type: "number", hasCustomFormat: true, customFormat: "${{price}}" }
         ]
     };
     SetupViewEndpoint("/Products", async (req, res) => {

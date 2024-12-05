@@ -45,21 +45,23 @@ function InitApp() {
 
     // Then we set up the view server
     viewServer = require("./src/view_server");
-    const { engine } = require("express-handlebars");
-    app.engine("hbs", engine({
+    const hbs = require("hbs");
+    const handlebars = require("express-handlebars");
+    app.engine("hbs", handlebars.engine({
         extname: "hbs",
         defaultLayout: "Main",
         layoutsDir: "./views/layouts",
         helpers: {
-            json: function (context) {
-                return JSON.stringify(context);
-            },
             keyvalues: function (obj, options) {
-            const keys = Object.keys(obj);
-            return keys.map(key => {
-                const context = { key: key, value: obj[key] };
-                return options.fn(context);
-            }).join('');
+                const keys = Object.keys(obj);
+                return keys.map(key => {
+                    const context = { key: key, value: obj[key] };
+                    return options.fn(context);
+                }).join('');
+            },
+            eval: function(statement, context) {
+                const template = hbs.compile(statement);
+                return new hbs.SafeString(template(context));
             }
         }
     }));
