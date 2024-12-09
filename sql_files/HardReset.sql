@@ -67,8 +67,8 @@ CREATE TABLE Prescriptions(
 -- Create PatientsXDoctors table
 CREATE TABLE PatientsXDoctors(
     patientsXDoctorsID INT AUTO_INCREMENT UNIQUE NOT NULL,
-    patientID INT,
-    doctorID INT,
+    patientID INT NOT NULL,
+    doctorID INT NOT NULL,
     PRIMARY KEY(patientsXDoctorsID),
     FOREIGN KEY(patientID) REFERENCES Patients(patientID) ON DELETE CASCADE,
     FOREIGN KEY(doctorID) REFERENCES Doctors(doctorID) ON DELETE CASCADE
@@ -76,8 +76,8 @@ CREATE TABLE PatientsXDoctors(
 -- Create PrescriptionsXProducts table
 CREATE TABLE PrescriptionsXProducts (
     prescriptionsXProductsID INT AUTO_INCREMENT UNIQUE NOT NULL,
-    prescriptionID INT,
-    productID INT,
+    prescriptionID INT NOT NULL,
+    productID INT NOT NULL,
     PRIMARY KEY(prescriptionsXProductsID),
     FOREIGN KEY(prescriptionID) REFERENCES Prescriptions(prescriptionID) ON DELETE CASCADE,
     FOREIGN KEY(productID) REFERENCES Products(productID) ON DELETE CASCADE

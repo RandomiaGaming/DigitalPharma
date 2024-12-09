@@ -59,7 +59,7 @@ function InitApp() {
                     return options.fn(context);
                 }).join('');
             },
-            eval: function(statement, context) {
+            eval: function (statement, context) {
                 const template = hbs.compile(statement);
                 return new hbs.SafeString(template(context));
             }

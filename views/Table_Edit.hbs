@@ -19,9 +19,10 @@ root
             -->
                 <tr>
                     <td>
+                        <label for="{{name}}">{{displayName}}: </label>
                         {{#if isForeignKey}}
-                            <label for="{{name}}">{{displayName}}: </label>
                             <select id="{{name}}" name="{{name}}">
+                                <option value="null" selected>Null</option>
                                 {{#with (lookup ../this foreignTableName)}}
                                 <!--
                                 root
@@ -43,8 +44,11 @@ root
                                 document.getElementById("{{name}}").value = "{{lookup ../result name}}";
                             </script>
                         {{else}}
-                            <label for="{{name}}">{{displayName}}: </label>
-                            <input type="{{type}}" name="{{name}}" id="{{name}}" value="{{lookup ../result name}}">
+                            {{#if notNull}}
+                                <input type="{{type}}" name="{{name}}" id="{{name}}" value="{{lookup ../result name}}" required>
+                            {{else}}
+                                <input type="{{type}}" name="{{name}}" id="{{name}}" value="{{lookup ../result name}}">
+                            {{/if}}
                         {{/if}}
                     </td>
                 </tr>

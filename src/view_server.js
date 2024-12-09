@@ -13,8 +13,8 @@ function SetupViewEndpoint(endpointName, handler) {
 
 async function GetReferenceNamesForClinics() {
     const results = await apiServer.API_GetClinics();
-    const output = { };
-    for(result of results) {
+    const output = {};
+    for (result of results) {
         output[result.clinicID] = result.address;
     };
     return output;
@@ -22,8 +22,8 @@ async function GetReferenceNamesForClinics() {
 
 async function GetReferenceNamesForDoctors() {
     const results = await apiServer.API_GetDoctors();
-    const output = { };
-    for(result of results) {
+    const output = {};
+    for (result of results) {
         output[result.doctorID] = result.firstName + " " + result.lastName;
     };
     return output;
@@ -31,8 +31,8 @@ async function GetReferenceNamesForDoctors() {
 
 async function GetReferenceNamesForPatients() {
     const results = await apiServer.API_GetPatients();
-    const output = { };
-    for(result of results) {
+    const output = {};
+    for (result of results) {
         output[result.patientID] = result.firstName + " " + result.lastName;
     };
     return output;
@@ -40,8 +40,8 @@ async function GetReferenceNamesForPatients() {
 
 async function GetReferenceNamesForPrescriptions() {
     const results = await apiServer.API_GetPrescriptions();
-    const output = { };
-    for(result of results) {
+    const output = {};
+    for (result of results) {
         const patient = await apiServer.API_GetPatientByID(result.patientID);
         output[result.prescriptionID] = "Prescription for " + patient.firstName + " " + patient.lastName;
     };
@@ -50,8 +50,8 @@ async function GetReferenceNamesForPrescriptions() {
 
 async function GetReferenceNamesForProducts() {
     const results = await apiServer.API_GetProducts();
-    const output = { };
-    for(result of results) {
+    const output = {};
+    for (result of results) {
         output[result.productID] = result.genericName;
     };
     return output;
@@ -64,7 +64,7 @@ function SetupViewEndpointsForClinics() {
         primaryKeyName: "clinicID",
         fields: [
             // address, email, phoneNumber
-            { displayName: "Address", name: "address", type: "text" },
+            { displayName: "Address", name: "address", type: "text", notNull: true },
             { displayName: "Email", name: "email", type: "email" },
             { displayName: "Phone Number", name: "phoneNumber", type: "tel" }
         ]
@@ -108,8 +108,8 @@ function SetupViewEndpointsForDoctors() {
         primaryKeyName: "doctorID",
         fields: [
             // firstName, lastName, email, phoneNumber, clinicID
-            { displayName: "First Name", name: "firstName", type: "text", hasCustomFormat: true, customFormat: "{{firstName}} {{lastName}}", hasCustomName: true, customName: "Name" },
-            { displayName: "Last Name", name: "lastName", type: "text", isHidden: true },
+            { displayName: "First Name", name: "firstName", type: "text", hasCustomFormat: true, customFormat: "{{firstName}} {{lastName}}", hasCustomName: true, customName: "Name", notNull: true },
+            { displayName: "Last Name", name: "lastName", type: "text", isHidden: true, notNull: true },
             { displayName: "Email", name: "email", type: "email" },
             { displayName: "Phone Number", name: "phoneNumber", type: "tel" },
             { displayName: "Clinic ID", name: "clinicID", type: "text", isForeignKey: true, foreignTableName: "Clinics" }
@@ -158,12 +158,12 @@ function SetupViewEndpointsForPatients() {
         primaryKeyName: "patientID",
         fields: [
             // firstName, lastName, dateOfBirth, email, phoneNumber, address
-            { displayName: "First Name", name: "firstName",  type: "text", hasCustomFormat: true, customFormat: "{{firstName}} {{lastName}}", hasCustomName: true, customName: "Name" },
-            { displayName: "Last Name", name: "lastName", type: "text", isHidden: true },
-            { displayName: "Date Of Birth", name: "dateOfBirth", type: "date" },
+            { displayName: "First Name", name: "firstName", type: "text", hasCustomFormat: true, customFormat: "{{firstName}} {{lastName}}", hasCustomName: true, customName: "Name", notNull: true },
+            { displayName: "Last Name", name: "lastName", type: "text", isHidden: true, notNull: true },
+            { displayName: "Date Of Birth", name: "dateOfBirth", type: "date", notNull: true },
             { displayName: "Email", name: "email", type: "email" },
             { displayName: "Phone Number", name: "phoneNumber", type: "tel" },
-            { displayName: "Address", name: "address", type: "text" }
+            { displayName: "Address", name: "address", type: "text", notNull: true }
         ]
     };
     SetupViewEndpoint("/Patients", async (req, res) => {
@@ -207,9 +207,9 @@ function SetupViewEndpointsForPrescriptions() {
             // doctorID, patientID, quantity, numberOfRefills, instructions
             { displayName: "Doctor ID", name: "doctorID", type: "text", isForeignKey: true, foreignTableName: "Doctors" },
             { displayName: "Patient ID", name: "patientID", type: "text", isForeignKey: true, foreignTableName: "Patients" },
-            { displayName: "Quantity", name: "quantity", type: "number" },
-            { displayName: "Number Of Refills", name: "numberOfRefills", type: "number" },
-            { displayName: "Instructions", name: "instructions", type: "text" }
+            { displayName: "Quantity", name: "quantity", type: "number", notNull: true },
+            { displayName: "Number Of Refills", name: "numberOfRefills", type: "number", notNull: true },
+            { displayName: "Instructions", name: "instructions", type: "text", notNull: true }
         ]
     };
     SetupViewEndpoint("/Prescriptions", async (req, res) => {
@@ -304,8 +304,8 @@ function SetupViewEndpointsForPatientsXDoctors() {
         primaryKeyName: "patientsXDoctorsID",
         fields: [
             // patientID, doctorID
-            { displayName: "Patient ID", name: "patientID", type: "text", isForeignKey: true, foreignTableName: "Patients" },
-            { displayName: "Doctor ID", name: "doctorID", type: "text", isForeignKey: true, foreignTableName: "Doctors" }
+            { displayName: "Patient ID", name: "patientID", type: "text", isForeignKey: true, foreignTableName: "Patients", notNull: true },
+            { displayName: "Doctor ID", name: "doctorID", type: "text", isForeignKey: true, foreignTableName: "Doctors", notNull: true }
         ]
     };
     SetupViewEndpoint("/PatientsXDoctors", async (req, res) => {
@@ -355,8 +355,8 @@ function SetupViewEndpointsForPrescriptionsXProducts() {
         primaryKeyName: "prescriptionsXProductsID",
         fields: [
             // prescriptionID, productID
-            { displayName: "Prescription ID", name: "prescriptionID", type: "text", isForeignKey: true, foreignTableName: "Prescriptions" },
-            { displayName: "Product ID", name: "productID", type: "text", isForeignKey: true, foreignTableName: "Products" }
+            { displayName: "Prescription ID", name: "prescriptionID", type: "text", isForeignKey: true, foreignTableName: "Prescriptions", notNull: true },
+            { displayName: "Product ID", name: "productID", type: "text", isForeignKey: true, foreignTableName: "Products", notNull: true }
         ]
     };
     SetupViewEndpoint("/PrescriptionsXProducts", async (req, res) => {

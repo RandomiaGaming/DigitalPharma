@@ -9,6 +9,14 @@ function FormatDate(value) {
     return `${year}-${month}-${day}`;
 }
 
+function IsSQLNull(value) {
+    if (value === null || value === undefined || value === "" || value === "null" || value === "\"null\"") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Helper function to format the results of an sql query
 function FormatSQLResults(results) {
     if (results === null || results === undefined) {
@@ -41,6 +49,9 @@ async function SQL_Query(query) {
 
 // Helper function to block inputs which would allow for sql injection and formats dates properly
 function EscapeSQL(sqlArgument) {
+    if (IsSQLNull(sqlArgument)) {
+        return "null";
+    }
     const sqlValidCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 0123456789@+-.,/\\";
     if (sqlArgument instanceof Date) {
         sqlArgument = FormatDate(sqlArgument);
@@ -75,11 +86,11 @@ function SetupAPIEndpoint(endpointName, handler) {
 // Hard reset
 async function API_HardReset() {
     const fs = require("fs");
-    const ddlSql = fs.readFileSync("./sql_files/DDL.sql", "utf8");
-    const ddlSqlSplit = ddlSql.split(';').map(query => query.trim()).filter(query => query.length > 0);
-    for (const query of ddlSqlSplit) {
+    const hardResetSql = fs.readFileSync("./sql_files/HardReset.sql", "utf8");
+    const hardResetSqlSplit = hardResetSql.split(';').map(query => query.trim()).filter(query => query.length > 0);
+    for (const query of hardResetSqlSplit) {
         if (query) {
-            await sqlpool.query(query);
+            await SQL_Query(query);
         }
     }
 }
@@ -422,8 +433,13 @@ async function API_RemovePatientsXDoctors(patientsXDoctorsID) {
 }
 module.exports.API_RemovePatientsXDoctors = API_RemovePatientsXDoctors;
 async function API_UpdatePatientsXDoctors(patientsXDoctorsID, patientID, doctorID) {
-    const query = `UPDATE PatientsXDoctors SET patientID=${EscapeSQL(patientID)}, doctorID=${EscapeSQL(doctorID)} WHERE patientsXDoctorsID=${EscapeSQL(patientsXDoctorsID)};`;
-    await SQL_Query(query);
+    if (IsSQLNull(patientID) || IsSQLNull(doctorID)) {
+        await API_RemovePatientsXDoctors(patientsXDoctorsID);
+    }
+    else {
+        const query = `UPDATE PatientsXDoctors SET patientID=${EscapeSQL(patientID)}, doctorID=${EscapeSQL(doctorID)} WHERE patientsXDoctorsID=${EscapeSQL(patientsXDoctorsID)};`;
+        await SQL_Query(query);
+    }
 }
 module.exports.API_UpdatePatientsXDoctors = API_UpdatePatientsXDoctors;
 
@@ -451,7 +467,12 @@ async function API_RemovePrescriptionsXProducts(prescriptionsXProductsID) {
 }
 module.exports.API_RemovePrescriptionsXProducts = API_RemovePrescriptionsXProducts;
 async function API_UpdatePrescriptionsXProducts(prescriptionsXProductsID, prescriptionID, productID) {
-    const query = `UPDATE PrescriptionsXProducts SET prescriptionID=${EscapeSQL(prescriptionID)}, productID=${EscapeSQL(productID)} WHERE prescriptionsXProductsID=${EscapeSQL(prescriptionsXProductsID)};`;
-    await SQL_Query(query);
+    if (IsSQLNull(prescriptionID) || IsSQLNull(productID)) {
+        await API_RemovePrescriptionsXProducts(prescriptionsXProductsID);
+    }
+    else {
+        const query = `UPDATE PrescriptionsXProducts SET prescriptionID=${EscapeSQL(prescriptionID)}, productID=${EscapeSQL(productID)} WHERE prescriptionsXProductsID=${EscapeSQL(prescriptionsXProductsID)};`;
+        await SQL_Query(query);
+    }
 }
 module.exports.API_UpdatePrescriptionsXProducts = API_UpdatePrescriptionsXProducts;
