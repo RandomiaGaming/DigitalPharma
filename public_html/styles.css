@@ -80,7 +80,7 @@
 }
 
 body {
-    background-color: #333333;
+    background-color: #373737;
     width: 100vw;
     height: 100vh;
 }
@@ -106,7 +106,7 @@ tr,
 td,
 th {
     border-collapse: collapse;
-    border: 1px solid black;
+    border: 2px solid black;
 }
 
 tr,
@@ -117,9 +117,9 @@ th {
 
 input {
     background-color: rgba(0, 0, 0, 0);
-    border: 1px solid white;
+    border: 2px solid white;
 }
 
 select, option {
-    background-color: #333333;
+    background-color: #373737;
 }
