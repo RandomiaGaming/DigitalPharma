@@ -52,16 +52,18 @@ function InitApp() {
         defaultLayout: "Main",
         layoutsDir: "./views/layouts",
         helpers: {
-            keyvalues: function (obj, options) {
-                const keys = Object.keys(obj);
-                return keys.map(key => {
-                    const context = { key: key, value: obj[key] };
-                    return options.fn(context);
-                }).join('');
+            keyvalues: function (context, statements) {
+                let output = "";
+                let keys = Object.keys(context);
+                for (let key of keys) {
+                    let localContext = { key: key, value: context[key] };
+                    output = output + statements.fn(localContext).toString();
+                }
+                return output;
             },
             eval: function (statement, context) {
                 const template = hbs.compile(statement);
-                return new hbs.SafeString(template(context));
+                return template(context).toString();
             }
         }
     }));

@@ -13,45 +13,41 @@ function SetupViewEndpoint(endpointName, handler) {
 
 async function GetReferenceNamesForClinics() {
     const results = await apiServer.API_GetClinics();
-    const output = {};
-    for (result of results) {
+    let output = {};
+    for (const result of results) {
         output[result.clinicID] = result.address;
     };
     return output;
 }
-
 async function GetReferenceNamesForDoctors() {
     const results = await apiServer.API_GetDoctors();
-    const output = {};
-    for (result of results) {
+    let output = {};
+    for (const result of results) {
         output[result.doctorID] = result.firstName + " " + result.lastName;
     };
     return output;
 }
-
 async function GetReferenceNamesForPatients() {
     const results = await apiServer.API_GetPatients();
-    const output = {};
-    for (result of results) {
+    let output = {};
+    for (const result of results) {
         output[result.patientID] = result.firstName + " " + result.lastName;
     };
     return output;
 }
-
 async function GetReferenceNamesForPrescriptions() {
     const results = await apiServer.API_GetPrescriptions();
-    const output = {};
-    for (result of results) {
+    let output = {};
+    for (const result of results) {
         const patient = await apiServer.API_GetPatientByID(result.patientID);
         output[result.prescriptionID] = "Prescription for " + patient.firstName + " " + patient.lastName;
     };
     return output;
 }
-
 async function GetReferenceNamesForProducts() {
     const results = await apiServer.API_GetProducts();
-    const output = {};
-    for (result of results) {
+    let output = {};
+    for (const result of results) {
         output[result.productID] = result.genericName;
     };
     return output;
@@ -100,7 +96,6 @@ function SetupViewEndpointsForClinics() {
         });
     });
 }
-
 function SetupViewEndpointsForDoctors() {
     const doctorsTableInfo = {
         name: "Doctors",
@@ -150,7 +145,6 @@ function SetupViewEndpointsForDoctors() {
         });
     });
 }
-
 function SetupViewEndpointsForPatients() {
     const patientsTableInfo = {
         name: "Patients",
@@ -197,7 +191,6 @@ function SetupViewEndpointsForPatients() {
         });
     });
 }
-
 function SetupViewEndpointsForPrescriptions() {
     const prescriptionsTableInfo = {
         name: "Prescriptions",
@@ -251,7 +244,6 @@ function SetupViewEndpointsForPrescriptions() {
         });
     });
 }
-
 function SetupViewEndpointsForProducts() {
     const productsTableInfo = {
         name: "Products",
@@ -296,7 +288,6 @@ function SetupViewEndpointsForProducts() {
         });
     });
 }
-
 function SetupViewEndpointsForPatientsXDoctors() {
     const patientsXDoctorsTableInfo = {
         name: "PatientsXDoctors",
@@ -347,7 +338,6 @@ function SetupViewEndpointsForPatientsXDoctors() {
         });
     });
 }
-
 function SetupViewEndpointsForPrescriptionsXProducts() {
     const prescriptionsXProductsTableInfo = {
         name: "PrescriptionsXProducts",

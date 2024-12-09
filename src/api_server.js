@@ -8,17 +8,15 @@ function FormatDate(value) {
     const day = value.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
-
-function IsSQLNull(value) {
+function IsNull(value) {
     if (value === null || value === undefined || value === "" || value === "null" || value === "\"null\"") {
         return true;
     } else {
         return false;
     }
 }
-
 // Helper function to format the results of an sql query
-function FormatSQLResults(results) {
+function FormatSqlResults(results) {
     if (results === null || results === undefined) {
         return "";
     } else if (results instanceof Date) {
@@ -26,30 +24,28 @@ function FormatSQLResults(results) {
     } else if (Array.isArray(results)) {
         const output = [];
         for (let i = 0; i < results.length; i++) {
-            output.push(FormatSQLResults(results[i]));
+            output.push(FormatSqlResults(results[i]));
         }
         return output;
     } else if (typeof results === 'object') {
         const transformedObject = {};
         for (const key in results) {
-            transformedObject[key] = FormatSQLResults(results[key]);
+            transformedObject[key] = FormatSqlResults(results[key]);
         }
         return transformedObject;
     } else {
         return results.toString();
     }
 }
-
 // Helper function to execute an sql query
 async function SQL_Query(query) {
     const results = await sqlpool.query(query);
-    const formattedResults = FormatSQLResults(results);
+    const formattedResults = FormatSqlResults(results);
     return formattedResults;
 }
-
 // Helper function to block inputs which would allow for sql injection and formats dates properly
 function EscapeSQL(sqlArgument) {
-    if (IsSQLNull(sqlArgument)) {
+    if (IsNull(sqlArgument)) {
         return "null";
     }
     const sqlValidCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 0123456789@+-.,/\\";
@@ -95,174 +91,6 @@ async function API_HardReset() {
     }
 }
 module.exports.API_HardReset = API_HardReset;
-
-// Sets the value of these vairables and sets up all the api endpoints for our server
-let app;
-let sqlpool;
-function SetupAPIEndpoints(appIn, sqlpoolIn) {
-    app = appIn;
-    sqlpool = sqlpoolIn;
-
-    SetupAPIEndpoint("/API/HardReset", async (req, res) => {
-        await API_HardReset();
-        res.json({});
-    });
-
-    // CRUD operations for Patients table
-    SetupAPIEndpoint("/API/GetPatients", async (req, res) => {
-        const results = await API_GetPatients();
-        res.json(results);
-    });
-    SetupAPIEndpoint("/API/GetPatientByID", async (req, res) => {
-        const result = await API_GetPatientByID(req.body.patientID);
-        res.json(result);
-    });
-    SetupAPIEndpoint("/API/AddPatient", async (req, res) => {
-        await API_AddPatient(req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/RemovePatient", async (req, res) => {
-        await API_RemovePatient(req.body.patientID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/UpdatePatient", async (req, res) => {
-        await API_UpdatePatient(req.body.patientID, req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
-        res.json({});
-    });
-
-    // CRUD operations for Clinics table
-    SetupAPIEndpoint("/API/GetClinics", async (req, res) => {
-        const results = await API_GetClinics();
-        res.json(results);
-    });
-    SetupAPIEndpoint("/API/GetClinicByID", async (req, res) => {
-        const result = await API_GetClinicByID(req.body.clinicID);
-        res.json(result);
-    });
-    SetupAPIEndpoint("/API/AddClinic", async (req, res) => {
-        await API_AddClinic(req.body.address, req.body.email, req.body.phoneNumber);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/RemoveClinic", async (req, res) => {
-        await API_RemoveClinic(req.body.clinicID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/UpdateClinic", async (req, res) => {
-        await API_UpdateClinic(req.body.clinicID, req.body.address, req.body.email, req.body.phoneNumber);
-        res.json({});
-    });
-
-    // CRUD operations for Doctors table
-    SetupAPIEndpoint("/API/GetDoctors", async (req, res) => {
-        const results = await API_GetDoctors();
-        res.json(results);
-    });
-    SetupAPIEndpoint("/API/GetDoctorByID", async (req, res) => {
-        const result = await API_GetDoctorByID(req.body.doctorID);
-        res.json(result);
-    });
-    SetupAPIEndpoint("/API/AddDoctor", async (req, res) => {
-        await API_AddDoctor(req.body.firstName, req.body.lastName, req.body.email, req.body.phoneNumber, req.body.clinicID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/RemoveDoctor", async (req, res) => {
-        await API_RemoveDoctor(req.body.doctorID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/UpdateDoctor", async (req, res) => {
-        await API_UpdateDoctor(req.body.doctorID, req.body.firstName, req.body.lastName, req.body.email, req.body.phoneNumber, req.body.clinicID);
-        res.json({});
-    });
-
-    // CRUD operations for Products table
-    SetupAPIEndpoint("/API/GetProducts", async (req, res) => {
-        const results = await API_GetProducts();
-        res.json(results);
-    });
-    SetupAPIEndpoint("/API/GetProductByID", async (req, res) => {
-        const result = await API_GetProductByID(req.body.productID);
-        res.json(result);
-    });
-    SetupAPIEndpoint("/API/AddProduct", async (req, res) => {
-        await API_AddProduct(req.body.genericName, req.body.brandName, req.body.description, req.body.price);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/RemoveProduct", async (req, res) => {
-        await API_RemoveProduct(req.body.productID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/UpdateProduct", async (req, res) => {
-        await API_UpdateProduct(req.body.productID, req.body.genericName, req.body.brandName, req.body.description, req.body.price);
-        res.json({});
-    });
-
-    // CRUD operations for Prescriptions table
-    SetupAPIEndpoint("/API/GetPrescriptions", async (req, res) => {
-        const results = await API_GetPrescriptions();
-        res.json(results);
-    });
-    SetupAPIEndpoint("/API/GetPrescriptionByID", async (req, res) => {
-        const result = await API_GetPrescriptionByID(req.body.prescriptionID);
-        res.json(result);
-    });
-    SetupAPIEndpoint("/API/AddPrescription", async (req, res) => {
-        await API_AddPrescription(req.body.doctorID, req.body.patientID, req.body.quantity, req.body.numberOfRefills, req.body.instructions);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/RemovePrescription", async (req, res) => {
-        await API_RemovePrescription(req.body.prescriptionID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/UpdatePrescription", async (req, res) => {
-        await API_UpdatePrescription(req.body.prescriptionID, req.body.doctorID, req.body.patientID, req.body.quantity, req.body.numberOfRefills, req.body.instructions);
-        res.json({});
-    });
-
-    // CRUD operations for PatientsXDoctors table
-    SetupAPIEndpoint("/API/GetPatientsXDoctors", async (req, res) => {
-        const results = await API_GetPatientsXDoctors();
-        res.json(results);
-    });
-    SetupAPIEndpoint("/API_GetPatientsXDoctorsByID", async (req, res) => {
-        const result = await API_GetPatientsXDoctorsByID(req.body.patientsXDoctorsID);
-        res.json(result);
-    });
-    SetupAPIEndpoint("/API/AddPatientsXDoctors", async (req, res) => {
-        await API_AddPatientsXDoctors(req.body.patientID, req.body.doctorID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/RemovePatientsXDoctors", async (req, res) => {
-        await API_RemovePatientsXDoctors(req.body.patientsXDoctorsID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/UpdatePatientsXDoctors", async (req, res) => {
-        await API_UpdatePatientsXDoctors(req.body.patientsXDoctorsID, req.body.patientID, req.body.doctorID);
-        res.json({});
-    });
-
-    // CRUD operations for PrescriptionsXProducts table
-    SetupAPIEndpoint("/API/GetPrescriptionsXProducts", async (req, res) => {
-        const results = await API_GetPrescriptionsXProducts();
-        res.json(results);
-    });
-    SetupAPIEndpoint("/API/GetPrescriptionsXProductsByID", async (req, res) => {
-        const result = await API_GetPrescriptionsXProductsByID(req.body.prescriptionsXProductsID);
-        res.json(result);
-    });
-    SetupAPIEndpoint("/API/AddPrescriptionsXProducts", async (req, res) => {
-        await API_AddPrescriptionsXProducts(req.body.prescriptionID, req.body.productID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/RemovePrescriptionsXProducts", async (req, res) => {
-        await API_RemovePrescriptionsXProducts(req.body.prescriptionsXProductsID);
-        res.json({});
-    });
-    SetupAPIEndpoint("/API/UpdatePrescriptionsXProducts", async (req, res) => {
-        await API_UpdatePrescriptionsXProducts(req.body.prescriptionsXProductsID, req.body.prescriptionID, req.body.productID);
-        res.json({});
-    });
-}
-module.exports.SetupAPIEndpoints = SetupAPIEndpoints;
 
 // CRUD operations on Patients table
 async function API_GetPatients() {
@@ -433,7 +261,7 @@ async function API_RemovePatientsXDoctors(patientsXDoctorsID) {
 }
 module.exports.API_RemovePatientsXDoctors = API_RemovePatientsXDoctors;
 async function API_UpdatePatientsXDoctors(patientsXDoctorsID, patientID, doctorID) {
-    if (IsSQLNull(patientID) || IsSQLNull(doctorID)) {
+    if (IsNull(patientID) || IsNull(doctorID)) {
         await API_RemovePatientsXDoctors(patientsXDoctorsID);
     }
     else {
@@ -467,7 +295,7 @@ async function API_RemovePrescriptionsXProducts(prescriptionsXProductsID) {
 }
 module.exports.API_RemovePrescriptionsXProducts = API_RemovePrescriptionsXProducts;
 async function API_UpdatePrescriptionsXProducts(prescriptionsXProductsID, prescriptionID, productID) {
-    if (IsSQLNull(prescriptionID) || IsSQLNull(productID)) {
+    if (IsNull(prescriptionID) || IsNull(productID)) {
         await API_RemovePrescriptionsXProducts(prescriptionsXProductsID);
     }
     else {
@@ -476,3 +304,171 @@ async function API_UpdatePrescriptionsXProducts(prescriptionsXProductsID, prescr
     }
 }
 module.exports.API_UpdatePrescriptionsXProducts = API_UpdatePrescriptionsXProducts;
+
+// Sets the value of these vairables and sets up all the api endpoints for our server
+let app;
+let sqlpool;
+function SetupAPIEndpoints(appIn, sqlpoolIn) {
+    app = appIn;
+    sqlpool = sqlpoolIn;
+
+    SetupAPIEndpoint("/API/HardReset", async (req, res) => {
+        await API_HardReset();
+        res.json({});
+    });
+
+    // CRUD operations for Patients table
+    SetupAPIEndpoint("/API/GetPatients", async (req, res) => {
+        const results = await API_GetPatients();
+        res.json(results);
+    });
+    SetupAPIEndpoint("/API/GetPatientByID", async (req, res) => {
+        const result = await API_GetPatientByID(req.body.patientID);
+        res.json(result);
+    });
+    SetupAPIEndpoint("/API/AddPatient", async (req, res) => {
+        await API_AddPatient(req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/RemovePatient", async (req, res) => {
+        await API_RemovePatient(req.body.patientID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/UpdatePatient", async (req, res) => {
+        await API_UpdatePatient(req.body.patientID, req.body.firstName, req.body.lastName, req.body.dateOfBirth, req.body.email, req.body.phoneNumber, req.body.address);
+        res.json({});
+    });
+
+    // CRUD operations for Clinics table
+    SetupAPIEndpoint("/API/GetClinics", async (req, res) => {
+        const results = await API_GetClinics();
+        res.json(results);
+    });
+    SetupAPIEndpoint("/API/GetClinicByID", async (req, res) => {
+        const result = await API_GetClinicByID(req.body.clinicID);
+        res.json(result);
+    });
+    SetupAPIEndpoint("/API/AddClinic", async (req, res) => {
+        await API_AddClinic(req.body.address, req.body.email, req.body.phoneNumber);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/RemoveClinic", async (req, res) => {
+        await API_RemoveClinic(req.body.clinicID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/UpdateClinic", async (req, res) => {
+        await API_UpdateClinic(req.body.clinicID, req.body.address, req.body.email, req.body.phoneNumber);
+        res.json({});
+    });
+
+    // CRUD operations for Doctors table
+    SetupAPIEndpoint("/API/GetDoctors", async (req, res) => {
+        const results = await API_GetDoctors();
+        res.json(results);
+    });
+    SetupAPIEndpoint("/API/GetDoctorByID", async (req, res) => {
+        const result = await API_GetDoctorByID(req.body.doctorID);
+        res.json(result);
+    });
+    SetupAPIEndpoint("/API/AddDoctor", async (req, res) => {
+        await API_AddDoctor(req.body.firstName, req.body.lastName, req.body.email, req.body.phoneNumber, req.body.clinicID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/RemoveDoctor", async (req, res) => {
+        await API_RemoveDoctor(req.body.doctorID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/UpdateDoctor", async (req, res) => {
+        await API_UpdateDoctor(req.body.doctorID, req.body.firstName, req.body.lastName, req.body.email, req.body.phoneNumber, req.body.clinicID);
+        res.json({});
+    });
+
+    // CRUD operations for Products table
+    SetupAPIEndpoint("/API/GetProducts", async (req, res) => {
+        const results = await API_GetProducts();
+        res.json(results);
+    });
+    SetupAPIEndpoint("/API/GetProductByID", async (req, res) => {
+        const result = await API_GetProductByID(req.body.productID);
+        res.json(result);
+    });
+    SetupAPIEndpoint("/API/AddProduct", async (req, res) => {
+        await API_AddProduct(req.body.genericName, req.body.brandName, req.body.description, req.body.price);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/RemoveProduct", async (req, res) => {
+        await API_RemoveProduct(req.body.productID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/UpdateProduct", async (req, res) => {
+        await API_UpdateProduct(req.body.productID, req.body.genericName, req.body.brandName, req.body.description, req.body.price);
+        res.json({});
+    });
+
+    // CRUD operations for Prescriptions table
+    SetupAPIEndpoint("/API/GetPrescriptions", async (req, res) => {
+        const results = await API_GetPrescriptions();
+        res.json(results);
+    });
+    SetupAPIEndpoint("/API/GetPrescriptionByID", async (req, res) => {
+        const result = await API_GetPrescriptionByID(req.body.prescriptionID);
+        res.json(result);
+    });
+    SetupAPIEndpoint("/API/AddPrescription", async (req, res) => {
+        await API_AddPrescription(req.body.doctorID, req.body.patientID, req.body.quantity, req.body.numberOfRefills, req.body.instructions);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/RemovePrescription", async (req, res) => {
+        await API_RemovePrescription(req.body.prescriptionID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/UpdatePrescription", async (req, res) => {
+        await API_UpdatePrescription(req.body.prescriptionID, req.body.doctorID, req.body.patientID, req.body.quantity, req.body.numberOfRefills, req.body.instructions);
+        res.json({});
+    });
+
+    // CRUD operations for PatientsXDoctors table
+    SetupAPIEndpoint("/API/GetPatientsXDoctors", async (req, res) => {
+        const results = await API_GetPatientsXDoctors();
+        res.json(results);
+    });
+    SetupAPIEndpoint("/API_GetPatientsXDoctorsByID", async (req, res) => {
+        const result = await API_GetPatientsXDoctorsByID(req.body.patientsXDoctorsID);
+        res.json(result);
+    });
+    SetupAPIEndpoint("/API/AddPatientsXDoctors", async (req, res) => {
+        await API_AddPatientsXDoctors(req.body.patientID, req.body.doctorID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/RemovePatientsXDoctors", async (req, res) => {
+        await API_RemovePatientsXDoctors(req.body.patientsXDoctorsID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/UpdatePatientsXDoctors", async (req, res) => {
+        await API_UpdatePatientsXDoctors(req.body.patientsXDoctorsID, req.body.patientID, req.body.doctorID);
+        res.json({});
+    });
+
+    // CRUD operations for PrescriptionsXProducts table
+    SetupAPIEndpoint("/API/GetPrescriptionsXProducts", async (req, res) => {
+        const results = await API_GetPrescriptionsXProducts();
+        res.json(results);
+    });
+    SetupAPIEndpoint("/API/GetPrescriptionsXProductsByID", async (req, res) => {
+        const result = await API_GetPrescriptionsXProductsByID(req.body.prescriptionsXProductsID);
+        res.json(result);
+    });
+    SetupAPIEndpoint("/API/AddPrescriptionsXProducts", async (req, res) => {
+        await API_AddPrescriptionsXProducts(req.body.prescriptionID, req.body.productID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/RemovePrescriptionsXProducts", async (req, res) => {
+        await API_RemovePrescriptionsXProducts(req.body.prescriptionsXProductsID);
+        res.json({});
+    });
+    SetupAPIEndpoint("/API/UpdatePrescriptionsXProducts", async (req, res) => {
+        await API_UpdatePrescriptionsXProducts(req.body.prescriptionsXProductsID, req.body.prescriptionID, req.body.productID);
+        res.json({});
+    });
+}
+module.exports.SetupAPIEndpoints = SetupAPIEndpoints;
