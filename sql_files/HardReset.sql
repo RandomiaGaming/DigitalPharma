@@ -41,7 +41,7 @@ CREATE TABLE Doctors(
     phoneNumber VARCHAR (15) UNIQUE NULL,
     clinicID INT,
     PRIMARY KEY(doctorID),
-    FOREIGN KEY(clinicID) REFERENCES Clinics(clinicID) ON DELETE CASCADE
+    FOREIGN KEY(clinicID) REFERENCES Clinics(clinicID) ON DELETE SET NULL
 );
 -- Create Products table
 CREATE TABLE Products(
@@ -61,8 +61,8 @@ CREATE TABLE Prescriptions(
     numberOfRefills INT NOT NULL,
     instructions TEXT NOT NULL,
     PRIMARY KEY(prescriptionID),
-    FOREIGN KEY(doctorID) REFERENCES Doctors(doctorID) ON DELETE CASCADE,
-    FOREIGN KEY(patientID) REFERENCES Patients(patientID) ON DELETE CASCADE
+    FOREIGN KEY(doctorID) REFERENCES Doctors(doctorID) ON DELETE SET NULL,
+    FOREIGN KEY(patientID) REFERENCES Patients(patientID) ON DELETE SET NULL
 );
 -- Create PatientsXDoctors table
 CREATE TABLE PatientsXDoctors(
